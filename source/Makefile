@@ -5,7 +5,7 @@
 CC = g++
 CFLAGS = `wx-config --cppflags` `pkg-config --cflags glib-2.0 gtk+-2.0`
 SRC = inicio.cpp
-OBJ = VarGlobal.o Inicio.o save.o tren.o chr_taskbar.o
+OBJ = VarGlobal.o Inicio.o save.o tren.o chr_taskbar.o dkey.o
 EXIT = Azpazeta
 LIBFLAGS = `wx-config --libs` `pkg-config --libs glib-2.0 gtk+-2.0` -lnotify
 
@@ -16,6 +16,8 @@ all: $(OBJ)
 	g++ -o Azpazeta $(OBJ) $(LIBFLAGS) 
 Inicio.o:
 	g++ -c inicio.cpp -o Inicio.o -DIDIOMA=ES $(CFLAGS)
+dkey.o:
+	g++ -c dkey.cpp -o dkey.o -DIDIOMA=ES $(CFLAGS)
 VarGlobal.o:
 	g++ -c VarGlobal.cpp -o VarGlobal.o $(CFLAGS)
 save.o:

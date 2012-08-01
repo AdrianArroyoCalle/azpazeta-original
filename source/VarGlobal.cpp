@@ -4,7 +4,7 @@ int x, y;
 int level=0;
 int money=2000;
 int city=0;
-char name;
+char* name;
 wxString newname;
 int adrx;
 int adry;

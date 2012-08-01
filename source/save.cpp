@@ -10,28 +10,60 @@ SaveDialog::SaveDialog()
 {
         wxPanel* panelSave=new wxPanel(this);
         guardar_std=new wxButton(panelSave,ID_SAVE1,wxT("Guardar"),wxPoint(100,50));
-        cargar_std=new wxButton(panelSave,ID_SAVE1,wxT("Cargar"),wxPoint(100,100));
-        guardar_copy=new wxButton(panelSave,ID_SAVE1,wxT("Guardar copia"),wxPoint(100,150));
-        guardar_std=new wxButton(panelSave,ID_SAVE1,wxT("Cargar copia"),wxPoint(100,200));
+        cargar_std=new wxButton(panelSave,ID_SAVE2,wxT("Cargar"),wxPoint(100,100));
+        guardar_copy=new wxButton(panelSave,ID_SAVE3,wxT("Guardar copia"),wxPoint(100,150));
+        guardar_std=new wxButton(panelSave,ID_SAVE4,wxT("Cargar copia"),wxPoint(100,200));
         
+	Connect(ID_SAVE1, wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(SaveDialog::OnBotonGuardarStd));
+	Connect(ID_SAVE2, wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(SaveDialog::OnBotonCargarStd));
+	Connect(ID_SAVE3, wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(SaveDialog::OnBotonGuardarCopy));
+	Connect(ID_SAVE4, wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(SaveDialog::OnBotonCargarCopy));
+
+
 }
 
 
 void SaveDialog::OnBotonGuardarStd(wxCommandEvent& event)
 {
-
+	wxMessageBox("Otra vez asi");
+	FILE* partida_guardar;
+	partida_guardar=fopen("/usr/share/Azpazeta/save/save.azp","w");
+	fprintf(partida_guardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:NOMBRE=A:AUX=%d\n",money, city, mision, aux);
+	fclose(partida_guardar);
+	this->Destroy();
 }
 void SaveDialog::OnBotonCargarStd(wxCommandEvent& event)
-{
-
+{	
+	FILE* partida_cargar;
+	partida_cargar=fopen("/usr/share/Azpazeta/save/save.azp","r");
+	fscanf(partida_cargar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:NOMBRE=%s:AUX=%d\n",&money, &city, &mision, &name,&aux);
+	fclose(partida_cargar);
+	this->Destroy();
 }
 void SaveDialog::OnBotonGuardarCopy(wxCommandEvent& event)
 {
+	wxFileDialog* openfile = new wxFileDialog(this,wxT("Guardar partida"),wxT(""),wxT(""),wxT("Azpazeta Save Files|*.azp"),wxFD_SAVE);
 
+        openfile->ShowModal();
+    // the user changed idea...
+        
+        // save the current contents in the file;
+        // this can be done with e.g. wxWidgets output streams:
+	FILE* partida_guardar;
+	partida_guardar=fopen(openfile->GetPath().c_str(),"w");
+	fprintf(partida_guardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:NOMBRE=A:AUX=%d\n",money, city, mision,aux);
+	fclose(partida_guardar);
+	this->Destroy();
 }
 void SaveDialog::OnBotonCargarCopy(wxCommandEvent& event)
 {
-
+	wxFileDialog* openfile = new wxFileDialog(this,wxT("Cargar partida"),wxT(""),wxT(""),wxT("Azpazeta Save Files|*.azp"),wxFD_OPEN);
+        openfile->ShowModal();
+	FILE* partida_cargar;
+	partida_cargar=fopen(openfile->GetPath().c_str(),"r");
+	fscanf(partida_cargar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:NOMBRE=%s:AUX=%d\n",&money, &city, &mision, &name,&aux);
+	fclose(partida_cargar);
+	this->Destroy();
 }
 void SaveDialog::Guardar(wxString archivo)
 {

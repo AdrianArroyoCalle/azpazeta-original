@@ -16,6 +16,15 @@
 #include <libnotify/notify.h>
 #include <wx/taskbar.h>
 #include "chr_taskbar.h"
+#include <string>
+#include <algorithm>
+#include <stdexcept>
+#include "dkey.h"
+#include <wx/filedlg.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <string>
 using namespace std;
 
 #ifdef __BORLANDC__
@@ -89,6 +98,11 @@ public:
 	void Stage1();
 	void Stage2();
 	void Stage3();
+	void Stage4();
+	void Stage5();
+	void Stage6();
+	void Stage7();
+	void Stage11();
 	void Load();
 	wxImage Play;
 	wxButton* jugar;

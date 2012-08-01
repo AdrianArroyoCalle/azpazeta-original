@@ -42,7 +42,8 @@ IMPLEMENT_APP(MyApp)
 // ----------------------------------------------------------------------------
 extern int x, y, adrx, adry, mision, city;
 extern char name;
-extern wxString newname; 
+extern wxString newname;
+int fachada;
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
@@ -54,6 +55,7 @@ bool MyApp::OnInit()
 	SetAppName(wxT("Azpazeta"));
 	SetVendorName(wxT("Adrian Arroyo Calle para Divel"));
         if(wxApp::argc>=2){
+	fachada=1;
         wxString archivo=wxApp::argv[1].mb_str();
         //int* newsavedlg=new SaveDialog::Cargar(wxString archivo);
         SaveDialog* newsavedlg=new SaveDialog();
@@ -111,54 +113,13 @@ MyFrame::MyFrame(const wxString& title)
 	wxBitmap portadaBMP("/usr/share/Azpazeta/media/newres/Portada.png", wxBITMAP_TYPE_PNG);*/
 	wxBitmap portadaBMP("/usr/share/Azpazeta/media/Portada4.png", wxBITMAP_TYPE_PNG);
 	Portada = new wxStaticBitmap(panel, ID_DIBUJO, portadaBMP, wxPoint(-1,-1));
+	if(fachada!=1){
 	actualizar=new wxButton(panel, ID_ACTUALIZAR, wxT("Actualizar juego"), wxPoint(100,500));
 	jugar=new wxButton(panel, ID_JUGAR, wxT("Cargar partida"), wxPoint(250,500));
-	instrucciones=new wxButton(panel, ID_INSTRUCCIONES, wxT("Instrucciones"), wxPoint(400,500));
-	/*wxBitmap bitmap("Play.png", wxBITMAP_TYPE_PNG);
-	SetSize(800,600);
-	wxPanel *panel = new wxPanel(this);
-	wxButton* calc = new wxButton(panel,ID_CALC,wxT("Calculadora"),wxPoint(8,8),wxSize(180,80)); //Point 20,50 Size 100,50
-	wxButton* net = new wxButton(panel,ID_NET,wxT("Internet"),wxPoint(200,8), wxSize(180,80));  //Sumar primer point con primer size y sumar 12 para obtener el siguiente point
-	wxButton* comprimir = new wxButton(panel,ID_COMPRIMIR,wxT("Comprimir"),wxPoint(392,8), wxSize(180,80));
-	wxButton* winunix = new wxButton(panel,ID_WINUNIX,wxT("WinUnix"),wxPoint(584,8), wxSize(180,80));
-	wxButton* write = new wxButton(panel,ID_WRITE,wxT("Divel Write"),wxPoint(8,100), wxSize(180,80));
-	wxButton* taskkiller = new wxButton(panel,ID_TASKKILLER,wxT("Divel Manager"),wxPoint(200,100),wxSize(180,80));
-	wxButton* correos = new wxButton(panel, ID_CORREOS, wxT("Agenda de Correos"),wxPoint(392,100),wxSize(180,80));
-	wxButton* updater = new wxButton(panel, ID_UPDATER, wxT("Divel Updater"),wxPoint(584,100), wxSize(180,80));*/
-	/*wxStaticBitmap* bmpBox = new wxStaticBitmap(panel, ID_DIBUJO, bitmap, wxPoint(8, 200));
-	wxStaticText* mastexto = new wxStaticText(panel, ID_TEXT, wxT("Viendo la superposicion"), wxPoint(8, 200));
-wxStaticText* mastexto2 = new wxStaticText(panel, ID_TEXT, wxT("Viendo la superposicion"), wxPoint(8, 210));
-
-	wxStaticText* texto= new wxStaticText(panel, ID_TEXT, wxT("Version experimental de wxWidgets como motor de juegos para Divel Games"), wxPoint(8, 200));*/
-	//wxImageHandler * pngLoader = new wxPNGHandler();
-	//wxImage::AddHandler(pngLoader);
-	//
-	
-	
-	//bitmap.LoadFile(wxT("Play.png"),wxBITMAP_TYPE_PNG,);
-	//bitmap.Create(600,600,false);
-	//Play("Play.png",wxBITMAP_TYPE_PNG);
-	//Play.LoadFile(wxT("Play.png"));
-	//bitmap=Play.ConvertToBitmap();
-	//Play.Create(50,50,true);
-	/*wxBoxSizer boxsizer;
-	boxsizer = wxBoxSizer(wxVERTICAL);
-        boxsizer.Add(bitmap, 0, wxALL | wxCENTRE, 20);
-        
-        self.SetSizer(boxsizer);
-        self.SetAutoLayout(True);*/	
+	instrucciones=new wxButton(panel, ID_INSTRUCCIONES, wxT("Instrucciones"), wxPoint(400,500));}
 
 	Connect(ID_JUGAR, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnJugar));
 	Connect(ID_USER, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnInstrucciones));
-	/*Connect(ID_CALC, wxEVT_COMMAND_BUTTON_CLICKED, 
-      wxCommandEventHandler(MyFrame::OnCalculadora));
-	Connect(ID_NET, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnNet));
-	Connect(ID_COMPRIMIR, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnComprimir));
-	Connect(ID_WINUNIX, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnWinUnix));
-	Connect(ID_WRITE, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnWrite));
-	Connect(ID_TASKKILLER, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnTaskKiller));
-	Connect(ID_CORREOS, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnCorreos));
-	Connect(ID_UPDATER, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnUpdater));*/
 
 #if wxUSE_MENUS
     // create a menu bar
@@ -231,7 +192,6 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnNet(wxCommandEvent& WXUNUSED(event))
 {
 	//DEBUG MODE
-	Stage1();
 	wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
 	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
 	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
@@ -257,12 +217,18 @@ void MyFrame::OnJugar(wxCommandEvent& WXUNUSED(event))
 	SaveDialog* extrasavedlg=new SaveDialog();
         extrasavedlg->Cargar(archivo);
         extrasavedlg->Destroy();
+	actualizar->Destroy();
+	jugar->Destroy();
+	instrucciones->Destroy();
 	Load();
 	}else if(city!=0){	
 	}else{
 	wxMessageBox(wxT("Empezando nueva partida"), wxT("Azpazeta"),wxICON_INFORMATION|wxOK);
 	newname=wxGetTextFromUser(wxT("Introduce tu nombre para la partida"),wxT("Azpazeta"),wxT(""));
 	city=1;
+	actualizar->Destroy();
+	jugar->Destroy();
+	instrucciones->Destroy();
 	MyFrame::Stage1();
 	}
 }
@@ -448,9 +414,10 @@ switch(city){
 	//El primer edificio está a 26 pix-------333pix y 27 piy--------------330 piy
 		case WXK_LEFT:
 		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){if(adrx==504){adrx--; Adrix->Destroy();Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry)); }}else{
+		if(adrx<=1){Stage4();Adrix->Destroy();}else{
 		adrx--;
 		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry));
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry));}
 		//if(adrx==1 && mision>=6){Stage2();}
 		}
 		break;
@@ -495,6 +462,8 @@ switch(city){
                 savedlg=new SaveDialog();
                 savedlg->ShowModal();
                 savedlg->Destroy();
+		Adrix->Destroy();
+		Load();
                 }
 		break;
 		case WXK_ESCAPE:
@@ -505,6 +474,49 @@ switch(city){
 		break;
 		case WXK_SHIFT:
 		wxString cheat=wxGetTextFromUser(wxT("Introduce el Cheat Code"), wxT("Debug Mode"),wxT(""));
+		break;
+		}break;
+	case 4:
+	switch(ascii)
+	{	
+	//366-222
+		case WXK_LEFT:
+			if(adrx<=283){}else{
+			adrx--;
+			Adrix->Destroy();
+			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx, adry));}
+		break;
+		case WXK_UP:
+			if(adry<=204 && adrx>=474){}else{
+			adry--;
+			Adrix->Destroy();
+			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry));}
+		break;
+		case WXK_RIGHT:
+			if((adry<=204 && adrx>=475) || (adry>=366 && adrx>=474)){}else{
+			adrx++;
+			Adrix->Destroy();
+			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));}
+		break;
+		case WXK_DOWN:
+			if(adry>=366 && adrx>=474){}else{
+			adry++;
+			Adrix->Destroy();
+			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));}
+		break;
+		case WXK_RETURN:{
+		DivelKey* keydlg=new DivelKey();
+		keydlg->ShowModal();
+		keydlg->Destroy();}
+		break;
+		case WXK_ESCAPE:
+		
+		break;
+		case WXK_TAB:
+		
+		break;
+		case WXK_SHIFT:
+		
 		break;
 		}break;
 
@@ -552,14 +564,40 @@ void MyFrame::Stage3()
 	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
 	city=3;
 }
+void MyFrame::Stage4()
+{
+	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap centro2("/usr/share/Azpazeta/media/Centro2.png",wxBITMAP_TYPE_PNG);
+	Portada->SetBitmap(centro2);
+	adrx=300;
+	adry=300;
+	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	city=4;
+}
+void MyFrame::Stage5()
+{
+
+}
+void MyFrame::Stage6()
+{
+
+}
+void MyFrame::Stage7()
+{
+
+}
+void MyFrame::Stage11()
+{
+
+}
 void MyFrame::Load()
 {
 	wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
 	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
 	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
-	actualizar->Destroy();
+	/*actualizar->Destroy();
 	jugar->Destroy();
-	instrucciones->Destroy();
+	instrucciones->Destroy();*/
 	NotifyNotification *n;
     	notify_init("Azpazeta");
     	n = notify_notification_new ("Azpazeta", "Se ha cargado correctamente la partida", NULL);
@@ -567,7 +605,18 @@ void MyFrame::Load()
 	if (!notify_notification_show (n, NULL)) {
         wxPrintf("Error al enviar notificación.\n");        
     	}
-	if(city==2){Stage2();}
+	switch(city){
+	case 1: Stage1(); break;
+	case 2: Stage2(); break;
+	case 3: Stage3(); break;
+	case 4: Stage4(); break;
+	case 5: Stage5(); break;
+	case 6: Stage6(); break;
+	case 7: Stage7(); break;
+	case 11: Stage11(); break;
+	default: Stage1(); break;
+
+	}
 
 }
 void MyApp::OnInitCmdLine(wxCmdLineParser& parser)
