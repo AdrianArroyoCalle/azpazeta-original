@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Azpazeta
+Comment=Azpazeta, the economic and strategy game.
+Comment[es]=Astrotite, el juego económico y estratégico.
+Exec=Azpazeta %f
+Terminal=false
+Type=Application
+Icon=azpazeta.png
+Categories=GTK;KDE;Games;
+MimeType=application/x-azpazeta-savefile
+Name[es_ES]=Azpazeta
+GenericName=Economic and strategy game
+GenericName[es_ES]=Juego de estrategia y economía
+

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+ <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+   <mime-type type="application/x-azpazeta-savefile">  
+   <comment>Azpazeta Save File</comment>
+   <comment xml:lang="es">Partidas de Azpazeta</comment>
+   <glob pattern="*.azp"/>
+  </mime-type>
+ </mime-info>

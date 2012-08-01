@@ -1,0 +1,4 @@
+dpkg-buildpackage -S -sa -rfakeroot -tc -D -k824E9059
+debuild -S -k824E9059
+dput -f my_ppa templvs_1.0.0.1_source.changes
+
