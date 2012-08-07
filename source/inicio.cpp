@@ -40,7 +40,7 @@ IMPLEMENT_APP(MyApp)
 // ----------------------------------------------------------------------------
 // the application class
 // ----------------------------------------------------------------------------
-extern int x, y, adrx, adry, mision, city;
+extern int x, y, adrx, adry, mision, city,aux;
 extern char name;
 extern wxString newname;
 int fachada;
@@ -200,7 +200,7 @@ void MyFrame::OnNet(wxCommandEvent& WXUNUSED(event))
 }
 void MyFrame::OnActualizar(wxCommandEvent& WXUNUSED(event))
 {
-
+	wxShell("update-manager -d");//Solo Ubuntu
 }
 void MyFrame::OnInstrucciones(wxCommandEvent& WXUNUSED(event))
 {
@@ -306,7 +306,7 @@ switch(city){
 		}}}
 		break;
 		case WXK_ESCAPE:
-		wxMessageBox(wxT("Intentando salir eh"));
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		wxMessageBox(wxT("TAB"));
@@ -398,7 +398,7 @@ switch(city){
 
 		break;
 		case WXK_ESCAPE:
-		wxMessageBox(wxT("Intentando salir eh"));
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		wxMessageBox(wxT("TAB"));
@@ -414,7 +414,7 @@ switch(city){
 	//El primer edificio está a 26 pix-------333pix y 27 piy--------------330 piy
 		case WXK_LEFT:
 		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){if(adrx==504){adrx--; Adrix->Destroy();Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry)); }}else{
-		if(adrx<=1){Stage4();Adrix->Destroy();}else{
+		if(adrx<=1){Adrix->Destroy();Stage4();}else{
 		adrx--;
 		Adrix->Destroy();
 		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry));}
@@ -467,7 +467,7 @@ switch(city){
                 }
 		break;
 		case WXK_ESCAPE:
-		wxMessageBox(wxT("Intentando salir eh"));
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		wxMessageBox(wxT("TAB"));
@@ -488,12 +488,14 @@ switch(city){
 		break;
 		case WXK_UP:
 			if(adry<=204 && adrx>=474){}else{
+			if(adry<=10){Adrix->Destroy();Stage5();}
 			adry--;
 			Adrix->Destroy();
 			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry));}
 		break;
 		case WXK_RIGHT:
 			if((adry<=204 && adrx>=475) || (adry>=366 && adrx>=474)){}else{
+			if(adrx>=746){Adrix->Destroy();Stage3();}
 			adrx++;
 			Adrix->Destroy();
 			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));}
@@ -504,13 +506,148 @@ switch(city){
 			Adrix->Destroy();
 			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));}
 		break;
-		case WXK_RETURN:{
+		case WXK_RETURN:
+		if((adrx>=616 || adrx<=688) && adry>=360){
 		DivelKey* keydlg=new DivelKey();
 		keydlg->ShowModal();
 		keydlg->Destroy();}
 		break;
 		case WXK_ESCAPE:
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		break;
+		case WXK_TAB:
 		
+		break;
+		case WXK_SHIFT:
+		
+		break;
+		}break;
+	case 5:
+	switch(ascii)
+	{	
+	//366-222
+		case WXK_LEFT:
+		if(adrx<=362 && (adry<=226 || adry>=399)){}else{
+		adrx--;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx, adry));
+
+		}
+		break;
+		case WXK_UP:
+		if(adrx<=362 && adry<=226){}else{
+		adry--;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx, adry));
+		}		//226-362
+		break;
+		case WXK_RIGHT:
+		if(adrx>=545){}else{
+		adrx++;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));
+		}
+		break;
+		case WXK_DOWN:
+		if(adrx<=362 && adry>=399){}else{
+		if(adry>=540){Adrix->Destroy();Stage4();}
+		adry++;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+		}//399-362
+		break;
+		case WXK_RETURN:
+
+		break;
+		case WXK_ESCAPE:
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		break;
+		case WXK_TAB:
+		
+		break;
+		case WXK_SHIFT:
+		
+		break;
+		}break;
+	case 6:
+	switch(ascii)
+	{	
+	//366-222
+		case WXK_LEFT:
+
+		break;
+		case WXK_UP:
+
+		break;
+		case WXK_RIGHT:
+
+		break;
+		case WXK_DOWN:
+
+		break;
+		case WXK_RETURN:
+
+		break;
+		case WXK_ESCAPE:
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		break;
+		case WXK_TAB:
+		
+		break;
+		case WXK_SHIFT:
+		
+		break;
+		}break;
+	case 7:
+	switch(ascii)
+	{	
+	//366-222
+		case WXK_LEFT:
+
+		break;
+		case WXK_UP:
+
+		break;
+		case WXK_RIGHT:
+
+		break;
+		case WXK_DOWN:
+
+		break;
+		case WXK_RETURN:
+
+		break;
+		case WXK_ESCAPE:
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		break;
+		case WXK_TAB:
+		
+		break;
+		case WXK_SHIFT:
+		
+		break;
+		}break;
+	case 11:
+	switch(ascii)
+	{	
+	//366-222
+		case WXK_LEFT:
+
+		break;
+		case WXK_UP:
+
+		break;
+		case WXK_RIGHT:
+
+		break;
+		case WXK_DOWN:
+
+		break;
+		case WXK_RETURN:
+
+		break;
+		case WXK_ESCAPE:
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		
@@ -576,19 +713,43 @@ void MyFrame::Stage4()
 }
 void MyFrame::Stage5()
 {
-
+	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap centro3("/usr/share/Azpazeta/media/Centro3.png", wxBITMAP_TYPE_PNG);
+	Portada->SetBitmap(centro3);
+	adrx=400;
+	adry=400;
+	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	city=5;
 }
 void MyFrame::Stage6()
 {
-
+		wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap hiper("/usr/share/Azpazeta/media/Hiper.png", wxBITMAP_TYPE_PNG);
+	Portada->SetBitmap(hiper);
+	adrx=300;
+	adry=300;
+	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	city=6;
 }
 void MyFrame::Stage7()
 {
-
+	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap golf("/usr/share/Azpazeta/media/Golf.png", wxBITMAP_TYPE_PNG);
+	Portada->SetBitmap(golf);
+	adrx=300;
+	adry=300;
+	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	city=7;
 }
 void MyFrame::Stage11()
 {
-
+	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap gorguez("/usr/share/Azpazeta/media/Gorguez.png", wxBITMAP_TYPE_PNG);
+	Portada->SetBitmap(gorguez);
+	adrx=300;
+	adry=300;
+	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	city=11;
 }
 void MyFrame::Load()
 {

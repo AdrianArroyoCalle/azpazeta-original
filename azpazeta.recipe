@@ -1,0 +1,4 @@
+# bzr-builder format 0.3 deb-version {debupstream}+{revno}+{revno:packaging}
+lp:~adrian-arroyocalle/+junk/azpazeta
+merge packaging lp:~adrian-arroyocalle/azpazeta/debian
+

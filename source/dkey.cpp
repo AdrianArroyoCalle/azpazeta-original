@@ -89,5 +89,5 @@ void DivelKey::OnObtener(wxCommandEvent& event)
 
 void DivelKey::VerTrucos(wxCommandEvent& event)
 {
-	wxMessageBox("-Guardar en cualquier momento (ACTIVO)\n-Dinero infinito (DESACTIVADO)\n-Teletransporte (DESACTIVADO)\n","Divel House",wxICON_INFORMATION|wxOK);
+	wxMessageBox("-Guardar en cualquier momento (ACTIVO)(Tecla ESC)\n-Dinero infinito (DESACTIVADO)\n-Teletransporte (DESACTIVADO)\n","Divel House",wxICON_INFORMATION|wxOK);
 }

@@ -16,7 +16,10 @@
 
 #define GO "Go"
 #define ERROR_101 "The file doesn't exist"
-
+#define DKEY_101 "This is the Azpazeta's store\nYou can buy cheats and extras\nBut for this you need\nto make the poll and get the key\nThe poll is anonymous\n"
+#define DKEY_102 "Get Key"
+#define DKEY_103 "You can view the cheats or get new cheats (in updates)"
+#define DKEY_104 "View cheats"
 
 //#endif
 
