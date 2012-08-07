@@ -13,7 +13,6 @@
 // ----------------------------------------------------------------------------
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
-
 // the event tables connect the wxWidgets events with the functions (event
 // handlers) which process them. It can be also done at run-time, but for the
 // simple menu events like this the static method is much simpler.
@@ -43,7 +42,7 @@ IMPLEMENT_APP(MyApp)
 extern int x, y, adrx, adry, mision, city,aux;
 extern char name;
 extern wxString newname;
-int fachada;
+int fachada, menu;
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
@@ -111,7 +110,7 @@ MyFrame::MyFrame(const wxString& title)
 	portadaSize=portada.Scale(x/2,y/2);
 	portadaSize.SaveFile("/usr/share/Azpazeta/media/newres/Portada.png",wxBITMAP_TYPE_PNG);
 	wxBitmap portadaBMP("/usr/share/Azpazeta/media/newres/Portada.png", wxBITMAP_TYPE_PNG);*/
-	wxBitmap portadaBMP("/usr/share/Azpazeta/media/Portada4.png", wxBITMAP_TYPE_PNG);
+	wxBitmap portadaBMP("/usr/share/Azpazeta/media/inicio.png", wxBITMAP_TYPE_PNG);
 	Portada = new wxStaticBitmap(panel, ID_DIBUJO, portadaBMP, wxPoint(-1,-1));
 	if(fachada!=1){
 	actualizar=new wxButton(panel, ID_ACTUALIZAR, wxT("Actualizar juego"), wxPoint(100,500));
@@ -123,10 +122,10 @@ MyFrame::MyFrame(const wxString& title)
 
 #if wxUSE_MENUS
     // create a menu bar
-    wxMenu *fileMenu = new wxMenu;
+    fileMenu = new wxMenu;
 
     // the "About" item should be in the help menu
-    wxMenu *helpMenu = new wxMenu;
+    helpMenu = new wxMenu;
 	helpMenu->Append(ID_INSTRUCCIONES, "&Instrucciones", "Instrucciones sobre Azpazeta");
     helpMenu->Append(Minimal_About, "A&cerca\tF1", "Acerca de Azpazeta");
 	fileMenu->Append(ID_ACTUALIZAR, "A&ctualizar", "Actualizar Azpazeta");
@@ -134,12 +133,12 @@ MyFrame::MyFrame(const wxString& title)
     fileMenu->Append(Minimal_Quit, "&Salir\tAlt-X", "Salir sin guardar");
 
     // now append the freshly created menu to the menu bar...
-    wxMenuBar *menuBar = new wxMenuBar();
+    menuBar = new wxMenuBar();
     menuBar->Append(fileMenu, "&Archivo");
     menuBar->Append(helpMenu, "A&yuda");
 
     // ... and attach this menu bar to the frame
-    SetMenuBar(menuBar);
+    //SetMenuBar(menuBar); //Hacer funcionar con tecla ALT-Estilo Windows 7
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
@@ -200,14 +199,17 @@ void MyFrame::OnNet(wxCommandEvent& WXUNUSED(event))
 }
 void MyFrame::OnActualizar(wxCommandEvent& WXUNUSED(event))
 {
+	#ifdef LINUX
 	wxShell("update-manager -d");//Solo Ubuntu
+	#endif
 }
 void MyFrame::OnInstrucciones(wxCommandEvent& WXUNUSED(event))
 {
-
+		//meter un pdf
 }
 void MyFrame::OnJugar(wxCommandEvent& WXUNUSED(event))
 {
+	wxMessageBox("Do you know that you can press ALT and access to the menus","Today's tip", wxICON_INFORMATION);
 	//wxSound("/usr/share/Azpazeta/audio/Hip-hop.wav").Play(wxSOUND_ASYNC|wxSOUND_LOOP);
 	FILE* partida;
 	wxString archivo=wxT("/usr/share/Azpazeta/save/save.azp");
@@ -311,9 +313,12 @@ switch(city){
 		case WXK_TAB:
 		wxMessageBox(wxT("TAB"));
 		break;
-		case WXK_SHIFT:
+		case WXK_SHIFT:{
 		wxString cheat=wxGetTextFromUser(wxT("Introduce el Cheat Code"), wxT("Debug Mode"),wxT(""));
-		if(cheat==wxT("2")){Stage1();Stage2();}
+		if(cheat==wxT("2")){Stage1();Stage2();}}
+		break;
+		case WXK_ALT:
+		SetMenuBar(menuBar);
 		break;
 		}break;
 	case 2:
@@ -401,11 +406,14 @@ switch(city){
 		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
 		break;
 		case WXK_TAB:
-		wxMessageBox(wxT("TAB"));
+		SetMenuBar(menuBar);
 		break;
-		case WXK_SHIFT:
+		case WXK_SHIFT:{
 		wxString cheat=wxGetTextFromUser(wxT("Introduce el Cheat Code"), wxT("Debug Mode"),wxT(""));
-		if(cheat==wxT("2")){Stage1();Stage2();}
+		if(cheat==wxT("2")){Stage1();Stage2();}}
+		break;
+		case WXK_ALT:
+		SetMenuBar(menuBar);
 		break;
 		}break;
 	case 3:
@@ -473,7 +481,9 @@ switch(city){
 		wxMessageBox(wxT("TAB"));
 		break;
 		case WXK_SHIFT:
-		wxString cheat=wxGetTextFromUser(wxT("Introduce el Cheat Code"), wxT("Debug Mode"),wxT(""));
+		break;
+		case WXK_ALT:
+		SetMenuBar(menuBar);
 		break;
 		}break;
 	case 4:
@@ -521,6 +531,9 @@ switch(city){
 		case WXK_SHIFT:
 		
 		break;
+		case WXK_ALT:
+		SetMenuBar(menuBar);
+		break;
 		}break;
 	case 5:
 	switch(ascii)
@@ -557,7 +570,13 @@ switch(city){
 		}//399-362
 		break;
 		case WXK_RETURN:
-
+		if((adrx>=154 && adrx<=222) && adry<=230){
+		switch(mision){
+		default: Police* poldlg=new Police();
+		poldlg->ShowModal();
+		poldlg->Destroy();
+			}		
+			}
 		break;
 		case WXK_ESCAPE:
 		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
@@ -567,6 +586,9 @@ switch(city){
 		break;
 		case WXK_SHIFT:
 		
+		break;
+		case WXK_ALT:
+		SetMenuBar(menuBar);
 		break;
 		}break;
 	case 6:
@@ -597,6 +619,9 @@ switch(city){
 		case WXK_SHIFT:
 		
 		break;
+		case WXK_ALT:
+		SetMenuBar(menuBar);
+		break;
 		}break;
 	case 7:
 	switch(ascii)
@@ -626,6 +651,9 @@ switch(city){
 		case WXK_SHIFT:
 		
 		break;
+		case WXK_ALT:
+		SetMenuBar(menuBar);
+		break;
 		}break;
 	case 11:
 	switch(ascii)
@@ -654,6 +682,9 @@ switch(city){
 		break;
 		case WXK_SHIFT:
 		
+		break;
+		case WXK_ALT:
+		SetMenuBar(menuBar);
 		break;
 		}break;
 
@@ -759,6 +790,7 @@ void MyFrame::Load()
 	/*actualizar->Destroy();
 	jugar->Destroy();
 	instrucciones->Destroy();*/
+	#ifdef LINUX
 	NotifyNotification *n;
     	notify_init("Azpazeta");
     	n = notify_notification_new ("Azpazeta", "Se ha cargado correctamente la partida", NULL);
@@ -766,6 +798,7 @@ void MyFrame::Load()
 	if (!notify_notification_show (n, NULL)) {
         wxPrintf("Error al enviar notificación.\n");        
     	}
+	#endif
 	switch(city){
 	case 1: Stage1(); break;
 	case 2: Stage2(); break;

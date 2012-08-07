@@ -4,3 +4,4 @@
 sudo cp *.png /usr/share/Azpazeta/media/
 sudo cp *.mp3 /usr/share/Azpazeta/audio/
 sudo cp *.wav /usr/share/Azpazeta/audio/
+sudo cp *.jpg /usr/share/Azpazeta/media/

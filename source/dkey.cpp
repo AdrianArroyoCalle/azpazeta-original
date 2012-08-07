@@ -22,7 +22,12 @@ DivelKey::DivelKey()
 }
 void DivelKey::OnObtener(wxCommandEvent& event)
 {
-	wxShell("firefox http://1.divelapps.appspot.com");
+	#ifdef LINUX	
+wxShell("firefox http://1.divelapps.appspot.com");
+#endif
+#ifdef WINDOWS
+wxShell("start http://1.divelapps.appspot.com");
+#endif
 	wxString mail=wxGetTextFromUser("Introduce tu correo","Divel Key","");
 	wxString hex_key=wxGetTextFromUser("Introduce la clave obtenida","Divel Key","");
 	//Codigo de pruebas

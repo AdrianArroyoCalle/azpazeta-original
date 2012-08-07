@@ -10,6 +10,9 @@
 #define DKEY_102 "Obtener clave"
 #define DKEY_103 "Has desbloqueado la Divel House\nPuedes ver los trucos que tienes activados\n o obtener unos nuevos (futuras actualizaciones)\n"
 #define DKEY_104 "Ver trucos"
+#define POLICE_101 "Bienvenido a la comisaria.\n Si tienes algo que reportar fuera de la ley, hazlo aqui."
+#define POLICE_102 "Informar de producto ilegal"
+#define POLICE_103 "Soborno policial"
 
 #else
 //Inglés

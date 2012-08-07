@@ -8,12 +8,15 @@ extern char name;
 SaveDialog::SaveDialog()
        : wxDialog(NULL, wxID_ANY, wxT("Casa"), wxPoint(-1,-1), wxSize(400,400))
 {
+	wxInitAllImageHandlers();
         wxPanel* panelSave=new wxPanel(this);
+	wxBitmap estacion("/usr/share/Azpazeta/media/save.png",wxBITMAP_TYPE_PNG);
+	wxStaticBitmap* fondo_estacion=new wxStaticBitmap(panelSave, wxID_ANY, estacion, wxPoint(-1,-1));
         guardar_std=new wxButton(panelSave,ID_SAVE1,wxT("Guardar"),wxPoint(100,50));
         cargar_std=new wxButton(panelSave,ID_SAVE2,wxT("Cargar"),wxPoint(100,100));
         guardar_copy=new wxButton(panelSave,ID_SAVE3,wxT("Guardar copia"),wxPoint(100,150));
         guardar_std=new wxButton(panelSave,ID_SAVE4,wxT("Cargar copia"),wxPoint(100,200));
-        
+
 	Connect(ID_SAVE1, wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(SaveDialog::OnBotonGuardarStd));
 	Connect(ID_SAVE2, wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(SaveDialog::OnBotonCargarStd));
 	Connect(ID_SAVE3, wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(SaveDialog::OnBotonGuardarCopy));

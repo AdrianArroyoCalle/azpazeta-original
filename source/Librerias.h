@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <string>
+#include "police.h"
 using namespace std;
 
 #ifdef __BORLANDC__
@@ -113,6 +114,9 @@ public:
 	wxStaticBitmap* Bocadillo;
 	wxStaticText* cap1mis1;
 	wxPanel* panel;
+	wxMenuBar* menuBar;
+	wxMenu *fileMenu;
+        wxMenu *helpMenu;
 private:
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
