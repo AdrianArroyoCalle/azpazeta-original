@@ -1,0 +1,5 @@
+julian@ubuntu:~/DEB/socket$ g++ -c -o divsock.o divsock.cpp
+julian@ubuntu:~/DEB/socket$ ar rcs libdivsock.a divsock.o
+julian@ubuntu:~/DEB/socket$ g++ -fPIC -c -o divsockdin.o divsock.cpp
+julian@ubuntu:~/DEB/socket$ g++ -shared -fPIC -o libdivsock.so divsockdin.o
+

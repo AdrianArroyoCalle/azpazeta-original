@@ -9,4 +9,7 @@ wxString newname;
 int adrx;
 int adry;
 int mision=0;
-int aux;
+int aux=0;
+int droga=0;
+int blacklist=0;
+int sobornos=0;

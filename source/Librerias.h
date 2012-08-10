@@ -26,6 +26,8 @@
 #include <string.h>
 #include <string>
 #include "police.h"
+#include <time.h>
+#include <ctime>
 using namespace std;
 
 #ifdef __BORLANDC__

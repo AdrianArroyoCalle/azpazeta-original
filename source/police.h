@@ -7,7 +7,8 @@ class Police : public wxDialog
 public:
 	Police();
 	void OnQuit(wxCommandEvent& event);
-	void OnPrimero(wxCommandEvent& event);
+	void Reportar(wxCommandEvent& event);
+	void Sobornar(wxCommandEvent& event);
 	wxStaticText* ultimahora;
 	wxButton* primero;
 
