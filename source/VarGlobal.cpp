@@ -13,3 +13,7 @@ int aux=0;
 int droga=0;
 int blacklist=0;
 int sobornos=0;
+int socio=0;
+int electro=0;
+int food=0; 
+int textil=0;

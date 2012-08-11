@@ -2,7 +2,7 @@
 //#include "inicio.hpp"
 #include "Librerias.h"
 
-extern int money, city, aux, mision, sobornos, blacklist, droga;
+extern int money, city, aux, mision, sobornos, blacklist, droga, socio, electro, food, textil;
 extern char name; 
 
 SaveDialog::SaveDialog()
@@ -28,19 +28,70 @@ SaveDialog::SaveDialog()
 
 void SaveDialog::OnBotonGuardarStd(wxCommandEvent& event)
 {
-	wxMessageBox("Otra vez asi");
-	FILE* partida_guardar;
-	partida_guardar=fopen("/usr/share/Azpazeta/save/save.azp","w");
-	fprintf(partida_guardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:\n",money, city, mision, aux, droga, sobornos, blacklist);
-	fclose(partida_guardar);
+	//FILE* partida_guardar;
+	//partida_guardar=fopen("/usr/share/Azpazeta/save/save.azp","w");
+	/*fprintf(partida_guardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:\n",money, city, mision, aux, droga, sobornos, blacklist);
+	fclose(partida_guardar);*/
+	//Nuevo sistema de partidas
+	char *home;
+	home=getenv("HOME");
+	wxString pathgeneral=wxString::Format("mkdir -p %s/.azpazeta",home);
+	system(pathgeneral.c_str());
+	wxString pathguardar=wxString::Format("%s/.azpazeta/save.azp",home);
+
+	wxFFileOutputStream out(pathguardar);
+	wxZipOutputStream zip(out);
+	wxTextOutputStream txt(zip);
+	wxString sep(wxFileName::GetPathSeparator());
+	char datosparaguardar[2048];
+	zip.PutNextEntry(wxT("AZPGeneral.txt"));
+	sprintf(datosparaguardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",money, city, mision, aux, droga, sobornos, blacklist, socio, electro, food, textil);
+	txt << datosparaguardar;
+	zip.PutNextEntry(wxT("SERVER-DATA")+ sep+ wxT("lastservers.txt"));
+	zip.PutNextEntry(wxT("META-DATA") + sep + wxT("INFO.txt"));
+	txt << wxT("Hi, this is the user information\n");
+
+
+	
 	this->Destroy();
 }
 void SaveDialog::OnBotonCargarStd(wxCommandEvent& event)
 {	
-	FILE* partida_cargar;
-	partida_cargar=fopen("/usr/share/Azpazeta/save/save.azp","r");
-	fscanf(partida_cargar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist);
-	fclose(partida_cargar);
+	//FILE* partida_cargar;
+	//partida_cargar=fopen("/usr/share/Azpazeta/save/save.azp","r");
+	/*fscanf(partida_cargar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist);
+	fclose(partida_cargar);*/
+	//Nuevo sistema de partidas
+	char *home;
+	home=getenv("HOME");
+	wxString pathgeneral=wxString::Format("mkdir -p %s/.azpazeta",home);
+	system(pathgeneral.c_str());
+	wxString pathguardar=wxString::Format("%s/.azpazeta/save.azp",home);
+	char mybuffer[2048];
+	 std::auto_ptr<wxZipEntry> entry;
+	wxFFileInputStream in(pathguardar);
+	wxZipInputStream zip(in);
+	int archivo=1;
+
+	while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)  {                 
+      		while (!zip.Eof()) {
+         		zip.Read(mybuffer, 2048);
+			if(archivo==1){
+				sscanf(mybuffer,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist, &socio, &electro, &food, &textil);//Los datos importantes de juego están aquí
+
+			}
+			archivo++;
+         		if (zip.LastRead() > 0) {
+           // do something with read data here, buffer contains zip.LastRead() valid bytes
+         }
+     	 }
+	}
+	
+
+
+
+
+	
 	this->Destroy();
 }
 void SaveDialog::OnBotonGuardarCopy(wxCommandEvent& event)
@@ -63,7 +114,7 @@ void SaveDialog::OnBotonGuardarCopy(wxCommandEvent& event)
 	wxString sep(wxFileName::GetPathSeparator());
 	char datosparaguardar[2048];
 	zip.PutNextEntry(wxT("AZPGeneral.txt"));
-	sprintf(datosparaguardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:\n",money, city, mision, aux, droga, sobornos, blacklist);
+	sprintf(datosparaguardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",money, city, mision, aux, droga, sobornos, blacklist, socio, electro, food, textil);
 	txt << datosparaguardar;
 	zip.PutNextEntry(wxT("SERVER-DATA")+ sep+ wxT("lastservers.txt"));
 	zip.PutNextEntry(wxT("META-DATA") + sep + wxT("INFO.txt"));
@@ -83,18 +134,33 @@ void SaveDialog::OnBotonCargarCopy(wxCommandEvent& event)
 	 std::auto_ptr<wxZipEntry> entry;
 	wxFFileInputStream in(openfile->GetPath());
 	wxZipInputStream zip(in);
+	int archivo=1;
 
-	while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)
+	while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)  {                 
+      		while (!zip.Eof()) {
+         		zip.Read(mybuffer, 2048);
+			if(archivo==1){
+				sscanf(mybuffer,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist, &socio, &electro, &food, &textil);//Los datos importantes de juego están aquí
+
+			}
+			archivo++;
+         		if (zip.LastRead() > 0) {
+           // do something with read data here, buffer contains zip.LastRead() valid bytes
+         }
+     	 }
+	}
+	
+	/*while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)
 	{
     // access meta-data
-    	wxString zipname = entry->GetName();
-	if (entry->IsDir())
-                {
-                    int perm = entry->GetMode();
-                    wxFileName::Mkdir(name, perm, wxPATH_MKDIR_FULL);
-                }
-                else // it is a file
-                {
+    	wxString zipname = wxT("AZPGeneral.txt");
+	//if (entry->IsDir())
+         //       {
+                    //int perm = entry->GetMode();
+                    //wxFileName::Mkdir(name, perm, wxPATH_MKDIR_FULL);
+                //}
+                //else // it is a file
+                //{
                     zip.OpenEntry(*entry.get());
                     if (!zip.CanRead())
                     {
@@ -109,10 +175,12 @@ void SaveDialog::OnBotonCargarCopy(wxCommandEvent& event)
                     }
 			wxPrintf("Good");
                     zip.Read(file);
+			wxMessageBox(file);
 			wxPrintf("Good");
     // read 'zip' to access the entry's data
-	}}zip.CloseEntry();
-
+	//}
+}zip.CloseEntry();
+*/
 }
 void SaveDialog::Guardar(wxString archivo)
 {
@@ -122,31 +190,35 @@ void SaveDialog::Cargar(wxString archivo)
 {
         wxPrintf("Cargando %s ...",archivo);
 	wxProgressDialog cargando("Azpazeta","Cargando partida...",3);
-	FILE* partida_cargar;
-	partida_cargar=fopen(archivo.c_str(),"r");
-	if(partida_cargar)
-	{
-		cargando.Update(1);
-		fscanf(partida_cargar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist);
+	//FILE* partida_cargar;
+	//partida_cargar=fopen(archivo.c_str(),"r");
+	cargando.Update(1);
+		//fscanf(partida_cargar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist);
 		cargando.Update(2);
-		fclose(partida_cargar);
+		//fclose(partida_cargar);
 		cargando.Update(3);
-		/*switch(city){
-		case 1: myframe->Stage1(); break;
-		case 2: myframe->Stage2(); break;
-		case 3: myframe->Stage3(); break;
-		default: wxMessageBox(ERROR_101,"Azpazeta",wxICON_ERROR|wxOK); cargando.Destroy(); break;
-		}*/
-		/*wxMessageBox("Todavia no violado 5");
-		cargando.Update(4);
-		wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
-		cargando.Update(5);
-		myframe->Bocadillo=new wxStaticBitmap(myframe->panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
-		cargando.Update(6);
-		myframe->cap1mis1=new wxStaticText(myframe->panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
-		cargando.Update(7);
-		cargando.Update(8);*/
 		
-	}else{wxMessageBox(ERROR_101,"Azpazeta",wxICON_ERROR|wxOK); cargando.Destroy();}
+	char mybuffer[2048];
+	std::auto_ptr<wxZipEntry> entry;
+	wxFFileInputStream in(archivo);
+	wxZipInputStream zip(in);
+	int leer=1;
+
+	while (entry.reset(zip.GetNextEntry()), entry.get() != NULL)  {                 
+      		while (!zip.Eof()) {
+         		zip.Read(mybuffer, 2048);
+			if(leer==1){
+				sscanf(mybuffer,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist, &socio, &electro, &food, &textil);//Los datos importantes de juego están aquí
+
+			}
+			leer++;
+         		if (zip.LastRead() > 0) {
+           // do something with read data here, buffer contains zip.LastRead() valid bytes
+         }
+     	 }
+	}
+	
+		
+
 	
 }

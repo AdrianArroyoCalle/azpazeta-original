@@ -47,6 +47,7 @@
 #include <wx/wfstream.h>
 #include <wx/txtstrm.h>
 #include <memory>
+#include "hiper.h"
 using namespace std;
 
 #ifdef __BORLANDC__

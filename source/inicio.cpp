@@ -47,15 +47,16 @@ int fachada, menu;
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+	wxInitAllImageHandlers();
 	wxBitmap splashbitmap;
-  	if (splashbitmap.LoadFile("/usr/share/Azpazeta/media/inicio.png", wxBITMAP_TYPE_PNG))
+  	if (splashbitmap.LoadFile("/usr/share/Azpazeta/media/splash.png", wxBITMAP_TYPE_PNG))
   	{
       	wxSplashScreen* splash = new wxSplashScreen(splashbitmap,
           wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-          6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+          6000, NULL, -1, wxDefaultPosition, wxSize(400,400),
           wxSIMPLE_BORDER|wxSTAY_ON_TOP);
   	}
-  	//wxYield();
+  	wxYield();
 	ChrTaskBarIcon* icon = new ChrTaskBarIcon(); 
     // call the base class initialization method, currently it only parses a
     // few common command-line options but it could be do more in the future
@@ -235,8 +236,14 @@ void MyFrame::OnJugar(wxCommandEvent& WXUNUSED(event))
 	partida=fopen("/usr/share/Azpazeta/save/save.azp","r");
 	if(partida){
 	fclose(partida);
+	char *home;
+	home=getenv("HOME");
+	wxString pathgeneral=wxString::Format("mkdir -p %s/.azpazeta",home);
+	system(pathgeneral.c_str());
+	wxString pathguardar=wxString::Format("%s/.azpazeta/save.azp",home);
+
 	SaveDialog* extrasavedlg=new SaveDialog();
-        extrasavedlg->Cargar(archivo);
+        extrasavedlg->Cargar(pathguardar);
         extrasavedlg->Destroy();
 	actualizar->Destroy();
 	jugar->Destroy();
@@ -568,6 +575,7 @@ switch(city){
 		break;
 		case WXK_UP:
 		if(adrx<=362 && adry<=226){}else{
+		if(adry<=5){Adrix->Destroy(); Stage6();}
 		adry--;
 		Adrix->Destroy();
 		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx, adry));
@@ -615,19 +623,31 @@ switch(city){
 	{	
 	//366-222
 		case WXK_LEFT:
-
+		adrx--;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx, adry));
 		break;
 		case WXK_UP:
-
+		if(adry<=300){}else{
+		adry--;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx, adry));
+		}
 		break;
 		case WXK_RIGHT:
-
+		adrx++;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));
 		break;
 		case WXK_DOWN:
-
+		if(adry>=540){Adrix->Destroy(); Stage5();}
+		adry++;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
 		break;
 		case WXK_RETURN:
-
+		//Entrar en Hipermercado
+		if(adry<=320 && (adrx>=407 && adrx<=470)){Hiper* hiperdlg; hiperdlg=new Hiper(); hiperdlg->ShowModal();hiperdlg->Destroy();}
 		break;
 		case WXK_ESCAPE:
 		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
