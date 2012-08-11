@@ -18,19 +18,24 @@
 int Lee_Socket (int fd, char *Datos, int Longitud);
 
 int Escribe_Socket (int fd, char *Datos, int Longitud);
-
+typedef struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;int socio;int electro;int food;int textil;} AZPServerData;
+typedef struct MyEstado{bool bien;int moneyotro;} MyEstado;
 int main()
 {
+	AZPServerData datos1;
+	AZPServerData datos2;
+	MyEstado myestado1;
+	MyEstado myestado2;
 	int tipoip;
+	int AZPServer;
+	int socketCliente[2];
 	printf("Select the type of IP:\n1. IPv4\n2. IPv6\n");
 	scanf("%d",&tipoip);
 	if(tipoip==1){
-	struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;} datos;
+	
 	int maximo=2;
 	fd_set descriptoresLectura;
-	int socketCliente[2];
 	int numeroClientes; 
-	int AZPServer;
 	char Cadena[2048];
 	char nombreCliente1[1024];
 	char nombreCliente2[1024];
@@ -60,16 +65,13 @@ int main()
 	Escribe_Socket(socketCliente[1], nombreCliente1, 1024);
 
 	//Cerramos la comunicación
-	close (socketCliente[0]);
-	close(socketCliente[1]);
-	close(AZPServer);}else{
+}else{
 	//IPv6
-	struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;} datos;
 	int maximo=2;
 	fd_set descriptoresLectura;
-	int socketCliente[2];
+	
 	int numeroClientes; 
-	int AZPServer;
+	
 	char Cadena[2048];
 	char nombreCliente1[1024];
 	char nombreCliente2[1024];
@@ -98,15 +100,51 @@ int main()
 	//Le mostramos el nombre del otro
 	Escribe_Socket(socketCliente[0], nombreCliente2, 1024);
 	Escribe_Socket(socketCliente[1], nombreCliente1, 1024);
-
 	//Cerramos la comunicación
-	close (socketCliente[0]);
-	close(socketCliente[1]);
-	close(AZPServer);
+	
 
 
 
 		}
+	
+	
+	read(socketCliente[0],&datos1, sizeof(datos1));
+	read(socketCliente[1],&datos2, sizeof(datos2));
+	if(datos1.money>datos2.money){
+	myestado1.bien=true;
+	myestado2.bien=false;
+	myestado1.moneyotro=datos2.money;
+	myestado2.moneyotro=datos1.money;
+
+	}else{
+	myestado1.bien=false;
+	myestado2.bien=true;
+	myestado1.moneyotro=datos2.money;
+	myestado2.moneyotro=datos1.money;}
+	write(socketCliente[0],&myestado1, sizeof(myestado1));
+	write(socketCliente[1],&myestado2, sizeof(myestado2));
+
+	//Repeticion
+read(socketCliente[0],&datos1, sizeof(datos1));
+	read(socketCliente[1],&datos2, sizeof(datos2));
+	if(datos1.money>datos2.money){
+	myestado1.bien=true;
+	myestado2.bien=false;
+	myestado1.moneyotro=datos2.money;
+	myestado2.moneyotro=datos1.money;
+
+	}else{
+	myestado1.bien=false;
+	myestado2.bien=true;
+	myestado1.moneyotro=datos2.money;
+	myestado2.moneyotro=datos1.money;}
+	write(socketCliente[0],&myestado1, sizeof(myestado1));
+	write(socketCliente[1],&myestado2, sizeof(myestado2));
+
+
+	close (socketCliente[0]);
+	close(socketCliente[1]);
+	close(AZPServer);
 
 }
 

@@ -9,6 +9,14 @@
 /////////////////////////////////////////////////////////////
 //Menú de juego
 /////////////////////////////////////////////////////////////
+//
+//
+static char *Id="$Id$";
+static char *Author="$Author$";
+int AZPServer;
+extern int money, level, city, mision, aux, droga, blacklist, sobornos, socio, electro, food, textil;
+typedef struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;int socio;int electro;int food;int textil;} AZPServerData;
+typedef struct MyEstado{bool bien;int moneyotro;} MyEstado;
 #include "inicio.hpp"
 // ----------------------------------------------------------------------------
 // event tables and other macros for wxWidgets
@@ -24,6 +32,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 	EVT_MENU(ID_AZPCLIENTE, MyFrame::AZPCliente)
 	EVT_MENU(ID_INSTRUCCIONES, MyFrame::OnInstrucciones)
 	EVT_KEY_DOWN(MyFrame::OnTecla)	
+	EVT_TIMER(TIMER_ID, MyFrame::ComprobarMulti)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWidgets to create
@@ -887,8 +896,9 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
 void MyFrame::AZPCliente(wxCommandEvent& event)
 {
 	int siono=wxMessageBox("Quieres utilizar IPv6?\nSi no se usara IPv4","Divel Network",wxICON_QUESTION|wxYES_NO);
+
 	if(siono==wxNO){
-	int AZPServer;
+	
 	char Cadena[1024];
 	char ip[1024];
 	char nombreCliente1[1024];
@@ -910,9 +920,8 @@ void MyFrame::AZPCliente(wxCommandEvent& event)
 	Escribe_Socket(AZPServer, nombreCliente1, 1024);
 	Lee_Socket(AZPServer, nombreCliente2, 1024);
 	wxMessageBox(wxString::Format("El otro jugador es: %s",nombreCliente2),"Divel Network");
-	close(AZPServer);}else{
+}else{
 	//IPv6
-	int AZPServer;
 	char Cadena[1024];
 	char ip[1024];
 	char nombreCliente1[1024];
@@ -938,12 +947,30 @@ void MyFrame::AZPCliente(wxCommandEvent& event)
 	Escribe_Socket(AZPServer, nombreCliente1, 1024);
 	Lee_Socket(AZPServer, nombreCliente2, 1024);
 	wxMessageBox(wxString::Format("El otro jugador es: %s",nombreCliente2),"Divel Network");
-	close(AZPServer);
-
-
-
-		}
-
+}
+	AZPServerData datos;
+	MyEstado myestado;
+	datos.money=money;
+	datos.level=level;
+	datos.city=city;
+	datos.name="A";
+	datos.droga=droga;
+	datos.blacklist=blacklist;
+	datos.socio=socio;
+	datos.electro=electro;
+	datos.food=food;
+	datos.textil=textil;
+	datos.sobornos=sobornos;
+	datos.mision=mision;
+	write(AZPServer, &datos, sizeof(datos));
+	read(AZPServer, &myestado, sizeof(myestado));
+	if(myestado.bien==true){wxMessageBox(wxString::Format("Bien, el otro tienen menos, concretamente: %d", myestado.moneyotro));}
+	if(myestado.bien==false){wxMessageBox(wxString::Format("Mal, el otro tiene mas, concretamente: %d", myestado.moneyotro));}
+	//close(AZPServer);
+	wxTimer* timer;
+	timer=new wxTimer(this, TIMER_ID);
+	timer->Start(60000, false);
+	
 
 }
 int MyFrame::Lee_Socket (int fd, char *Datos, int Longitud)
@@ -1061,4 +1088,25 @@ int MyFrame::Escribe_Socket (int fd, char *Datos, int Longitud)
 	* Devolvemos el total de caracteres leidos
 	*/
 	return Escrito;
+}
+void MyFrame::ComprobarMulti(wxTimerEvent& event)
+{
+AZPServerData datos;
+	MyEstado myestado;
+	datos.money=money;
+	datos.level=level;
+	datos.city=city;
+	datos.name="A";
+	datos.droga=droga;
+	datos.blacklist=blacklist;
+	datos.socio=socio;
+	datos.electro=electro;
+	datos.food=food;
+	datos.textil=textil;
+	datos.sobornos=sobornos;
+	datos.mision=mision;
+	write(AZPServer, &datos, sizeof(datos));
+	read(AZPServer, &myestado, sizeof(myestado));
+	if(myestado.bien==true){wxMessageBox(wxString::Format("Bien, el otro tienen menos, concretamente: %d", myestado.moneyotro));}
+	if(myestado.bien==false){wxMessageBox(wxString::Format("Mal, el otro tiene mas, concretamente: %d", myestado.moneyotro));}
 }

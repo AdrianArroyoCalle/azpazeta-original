@@ -12,8 +12,11 @@ class Hiper : public wxDialog{
 		void Tour(wxCommandEvent& event);
 		void Trabajar(wxCommandEvent& event);
 		void Suscribirse(wxCommandEvent& event);
-
-
+		wxButton* socios;
+		wxButton* trabajar;
+		wxButton* tour;
+		wxButton* comprar;
+		wxStaticText* info_hiper;
 
 };
 

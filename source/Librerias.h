@@ -48,6 +48,7 @@
 #include <wx/txtstrm.h>
 #include <memory>
 #include "hiper.h"
+#include <wx/mediactrl.h>
 using namespace std;
 
 #ifdef __BORLANDC__
@@ -128,6 +129,7 @@ public:
 	void Stage7();
 	void Stage11();
 	void Load();
+	void ComprobarMulti(wxTimerEvent& event);
 	int Lee_Socket (int fd, char *Datos, int Longitud);
 	int Escribe_Socket (int fd, char *Datos, int Longitud);
 	wxImage Play;
@@ -183,6 +185,7 @@ enum
 	ID_OFERTAS = 1022,
 	ID_REGALOS = 1023,
 	ID_AZPCLIENTE = 1024,
+	TIMER_ID,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
