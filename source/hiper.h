@@ -7,7 +7,7 @@
 class Hiper : public wxDialog{
 	public:
 		Hiper();
-		ComprarDlg();
+		//ComprarDlg();
 		void Comprar(wxCommandEvent& event);
 		void Tour(wxCommandEvent& event);
 		void Trabajar(wxCommandEvent& event);

@@ -457,6 +457,7 @@ switch(city){
 		break;
 		case WXK_UP:
 		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){printf("Valor X=%d Y=%d",adrx, adry);if(adry==199){adry--; Adrix->Destroy();Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry)); }}else{
+		if(adry<=5){Adrix->Destroy();Stage7();}
 		adry--;
 		Adrix->Destroy();
 		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry));}
@@ -667,16 +668,23 @@ switch(city){
 	{	
 	//366-222
 		case WXK_LEFT:
-
+		adrx--;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx, adry));
 		break;
 		case WXK_UP:
 
 		break;
 		case WXK_RIGHT:
-
+		adrx++;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));
 		break;
 		case WXK_DOWN:
-
+		if(adry>=540){Adrix->Destroy();Stage3();}
+		adry++;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
 		break;
 		case WXK_RETURN:
 

@@ -18,7 +18,7 @@ Hiper::Hiper() : wxDialog(NULL, wxID_ANY, wxT("Cadena Inc."), wxPoint(-1,-1), wx
 	Connect(ID_HIPER3,wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(Hiper::Trabajar));
 	Connect(ID_HIPER4,wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(Hiper::Suscribirse));
 }
-Hiper::ComprarDlg() : wxDialog(NULL, wxID_ANY, wxT("Buy and buy and ..."), wxPoint(-1,-1), wxSize(400,400))
+/*Hiper::ComprarDlg() : wxDialog(NULL, wxID_ANY, wxT("Buy and buy and ..."), wxPoint(-1,-1), wxSize(400,400))
 {
 	wxString compraOrden[6];
 	int PRECIOOrden[6];
@@ -64,20 +64,20 @@ Hiper::ComprarDlg() : wxDialog(NULL, wxID_ANY, wxT("Buy and buy and ..."), wxPoi
 	wxButton* b5=new wxButton(comprarpanel,ID_COMPRAR5, bText[4], wxPoint(50, 200)); 
 	wxButton* b6=new wxButton(comprarpanel,ID_COMPRAR6, bText[5], wxPoint(2500, 200)); 
 
-}
+}*/
 void Hiper::Comprar(wxCommandEvent& event)
 {
 
 }
-void Tour(wxCommandEvent& event)
+void Hiper::Tour(wxCommandEvent& event)
 {
 
 }
-void Trabajar(wxCommandEvent& event)
+void Hiper::Trabajar(wxCommandEvent& event)
 {
 
 }
-void Suscribirse(wxCommandEvent& event)
+void Hiper::Suscribirse(wxCommandEvent& event)
 {
 
 }

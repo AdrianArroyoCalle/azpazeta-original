@@ -35,19 +35,23 @@ install: build
 	dh_installdirs
 	# Create directories and copy files
 	# Build the sctructure
-	mkdir -p ${CURDIR}/debian/agendacorreosdivelso/usr/share/applications
-	mkdir -p ${CURDIR}/debian/agendacorreosdivelso/usr/share/pixmaps
-	mkdir -p ${CURDIR}/debian/agendacorreosdivelso/usr/bin
+	mkdir -p ${CURDIR}/debian/azpazeta/usr/share/applications
+	mkdir -p ${CURDIR}/debian/azpazeta/usr/share/pixmaps
+	mkdir -p ${CURDIR}/debian/azpazeta/usr/games
+	mkdir -p ${CURDIR}/debian/azpazeta/usr/share/Azpazeta/media
 	# Copy files
 	#cp img/*.svg ${CURDIR}/debian/agendacorreosdivelso/usr/share/touchpad-indicator/img/
-	cp source/sample.xpm ${CURDIR}/debian/agendacorreosdivelso/usr/share/pixmaps/AgendaCorreos.xpm
+	#cp source/sample.xpm ${CURDIR}/debian/agendacorreosdivelso/usr/share/pixmaps/AgendaCorreos.xpm
 	#cp touchpad-indicator-autostart.desktop ${CURDIR}/debian/agendacorreosdivelso/usr/share/touchpad-indicator/
 	#cp correos.cpp ${CURDIR}/debian/agendacorreosdivelso/usr/bi
-	cp source/otro ${CURDIR}/debian/agendacorreosdivelso/usr/bin/agendacorreos
+	#cp source/otro ${CURDIR}/debian/agendacorreosdivelso/usr/bin/agendacorreos
 	#cp sample.xpm ${CURDIR}/debian/agendacorreosdivelso/opt/agendacorreos/
-	cp source/"Visual Divel Start.desktop" ${CURDIR}/debian/agendacorreosdivelso/usr/share/applications/AgendaCorreos.desktop
+	#cp source/"Visual Divel Start.desktop" ${CURDIR}/debian/agendacorreosdivelso/usr/share/applications/AgendaCorreos.desktop
 	#g++ -c -o ${CURDIR}/debian/agendacorreosdivelso/opt/agendacorreos/AgendaCorreos.o `wx-config --cppflags` ${CURDIR}/debian/agendacorreosdivelso/opt/agendacorreos/correos.cpp
 	#g++ -o ${CURDIR}/debian/agendacorreosdivelso/opt/agendacorreos/AgendaCorreos ${CURDIR}/debian/agendacorreosdivelso/opt/agendacorreos/AgendaCorreos.o `wx-config --libs`
+	cp source/Azpazeta ${CURDIR}/debian/azpazeta/usr/games/Azpazeta
+	cp source/AZPServer ${CURDIR}/debian/azpazeta/usr/games/AZPServer
+	cp source/*.png ${CURDIR}/debian/azpazeta/usr/share/Azpazeta/media/
 		
 	# Structure and source files
 	#mkdir -p ${CURDIR}/debian/agendacorreosdivelso/usr/share/agendacorreosdivelso
