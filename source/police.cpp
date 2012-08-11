@@ -15,7 +15,7 @@ Police::Police()
         //guardar_std=new wxButton(panelSave,ID_SAVE4,wxT("Cargar copia"),wxPoint(100,200));
 
 	Connect(ID_POLICE1, wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(Police::Reportar));
-
+	Connect(ID_POLICE2, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(Police::Sobornar));
 
 }
 
@@ -42,4 +42,10 @@ void Police::Reportar(wxCommandEvent& event)
 
 
 	}}else{wxMessageBox("Deja de perder el tiempo");}
+}
+
+void Police::Sobornar(wxCommandEvent& event)
+{
+	if(blacklist>0){wxMessageBox("Eres reincidente y pides sobornos, que crees que pasa?\nPagas una multa de 1000 $");money-=1000;}else if(money>1000){wxMessageBox("Has comprado un soborno el jefe policial y has pagado 1000$");money-=1000; sobornos++;}
+	
 }

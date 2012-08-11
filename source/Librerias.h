@@ -28,6 +28,25 @@
 #include "police.h"
 #include <time.h>
 #include <ctime>
+#include <string.h>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <errno.h>
+#include <arpa/inet.h>
+#include <wx/filesys.h>
+#include <wx/splash.h>
+#include <wx/zipstrm.h>
+#include <wx/wfstream.h>
+#include <wx/txtstrm.h>
+#include <memory>
 using namespace std;
 
 #ifdef __BORLANDC__
@@ -98,6 +117,7 @@ public:
 	void OnCorreos(wxCommandEvent& event);
 	void OnUpdater(wxCommandEvent& event);
 	void OnTecla(wxKeyEvent& event);
+	void AZPCliente(wxCommandEvent& event);
 	void Stage1();
 	void Stage2();
 	void Stage3();
@@ -107,6 +127,8 @@ public:
 	void Stage7();
 	void Stage11();
 	void Load();
+	int Lee_Socket (int fd, char *Datos, int Longitud);
+	int Escribe_Socket (int fd, char *Datos, int Longitud);
 	wxImage Play;
 	wxButton* jugar;
 	wxButton* actualizar;
@@ -119,6 +141,7 @@ public:
 	wxMenuBar* menuBar;
 	wxMenu *fileMenu;
         wxMenu *helpMenu;
+	
 private:
     // any class wishing to process wxWidgets events must use this macro
     DECLARE_EVENT_TABLE()
@@ -158,6 +181,7 @@ enum
 	ID_VIAJAR = 1021,
 	ID_OFERTAS = 1022,
 	ID_REGALOS = 1023,
+	ID_AZPCLIENTE = 1024,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac

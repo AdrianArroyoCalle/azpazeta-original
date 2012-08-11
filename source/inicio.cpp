@@ -21,6 +21,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
     EVT_MENU(ID_ACTUALIZAR, MyFrame::OnActualizar)
 	EVT_MENU(ID_NET, MyFrame::OnNet)
+	EVT_MENU(ID_AZPCLIENTE, MyFrame::AZPCliente)
 	EVT_MENU(ID_INSTRUCCIONES, MyFrame::OnInstrucciones)
 	EVT_KEY_DOWN(MyFrame::OnTecla)	
 END_EVENT_TABLE()
@@ -46,6 +47,15 @@ int fachada, menu;
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+	wxBitmap splashbitmap;
+  	if (splashbitmap.LoadFile("/usr/share/Azpazeta/media/inicio.png", wxBITMAP_TYPE_PNG))
+  	{
+      	wxSplashScreen* splash = new wxSplashScreen(splashbitmap,
+          wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
+          6000, NULL, -1, wxDefaultPosition, wxDefaultSize,
+          wxSIMPLE_BORDER|wxSTAY_ON_TOP);
+  	}
+  	//wxYield();
 	ChrTaskBarIcon* icon = new ChrTaskBarIcon(); 
     // call the base class initialization method, currently it only parses a
     // few common command-line options but it could be do more in the future
@@ -128,6 +138,7 @@ MyFrame::MyFrame(const wxString& title)
     helpMenu = new wxMenu;
 	helpMenu->Append(ID_INSTRUCCIONES, "&Instrucciones", "Instrucciones sobre Azpazeta");
     helpMenu->Append(Minimal_About, "A&cerca\tF1", "Acerca de Azpazeta");
+	fileMenu->Append(ID_AZPCLIENTE, "Conectar con server", "Jugar multijugador");
 	fileMenu->Append(ID_ACTUALIZAR, "A&ctualizar", "Actualizar Azpazeta");
 	fileMenu->Append(ID_NET, "&Mas productos de Divel", "Mas productos de Divel");	
     fileMenu->Append(Minimal_Quit, "&Salir\tAlt-X", "Salir sin guardar");
@@ -209,7 +220,15 @@ void MyFrame::OnInstrucciones(wxCommandEvent& WXUNUSED(event))
 }
 void MyFrame::OnJugar(wxCommandEvent& WXUNUSED(event))
 {
-	wxMessageBox("Do you know that you can press ALT and access to the menus","Today's tip", wxICON_INFORMATION);
+	srand(time(NULL));
+	int tip=rand()%5+1;
+	switch(tip){
+	case 1: wxMessageBox("Do you know that you can press ALT and access to the menus?","Today's tip", wxICON_INFORMATION|wxOK);break;
+	case 2: wxMessageBox("Do you know that you can access to a Azpazeta Server and play with one friend?","Today's tip", wxICON_INFORMATION|wxOK);break;
+	case 3: wxMessageBox("Do you know that you can execute AZPServer and you have a Azpazeta Server?","Today's tip", wxICON_INFORMATION|wxOK);break;
+	case 4: wxMessageBox("Do you know that you can play also in Windows","Today's tip", wxICON_INFORMATION|wxOK);break;
+	case 5: wxMessageBox("Do you know that you can colaborate in launchpad.net/azpazeta","Today's tip", wxICON_INFORMATION|wxOK);break;
+	}
 	//wxSound("/usr/share/Azpazeta/audio/Hip-hop.wav").Play(wxSOUND_ASYNC|wxSOUND_LOOP);
 	FILE* partida;
 	wxString archivo=wxT("/usr/share/Azpazeta/save/save.azp");
@@ -835,4 +854,149 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
     // then do what you need with them.
  
     return true;
+}
+
+void MyFrame::AZPCliente(wxCommandEvent& event)
+{
+	int AZPServer;
+	char Cadena[1024];
+	char ip[1024];
+	char nombreCliente1[1024];
+	char nombreCliente2[1024];
+	wxString wxip=wxGetTextFromUser("Introduce la IP del server de Azpazeta","Divel Network","127.0.0.1");	
+	strncpy(ip, (const char*)wxip.mb_str(wxConvUTF8), 1023);
+	struct sockaddr_in Direccion;
+	struct servent *Puerto;
+	struct hostent *Host;
+	Direccion.sin_addr.s_addr=inet_addr(ip);
+	Direccion.sin_family = AF_INET;
+	Direccion.sin_port = 6996;
+	AZPServer = socket (AF_INET, SOCK_STREAM, 0);
+	connect (AZPServer, (struct sockaddr *)&Direccion, sizeof (Direccion));
+	Lee_Socket(AZPServer, Cadena,1024);
+	wxMessageBox(wxString::Format("%s",Cadena),"Server informa",wxICON_INFORMATION|wxOK);
+	wxString onlinename=wxGetTextFromUser("Introduce tu nombre online","Divel Network","");
+	strncpy(nombreCliente1, (const char*)onlinename.mb_str(wxConvUTF8), 1023);
+	Escribe_Socket(AZPServer, nombreCliente1, 1024);
+	Lee_Socket(AZPServer, nombreCliente2, 1024);
+	wxMessageBox(wxString::Format("El otro jugador es: %s",nombreCliente2),"Divel Network");
+	close(AZPServer);
+
+
+}
+int MyFrame::Lee_Socket (int fd, char *Datos, int Longitud)
+{
+	int Leido = 0;
+	int Aux = 0;
+
+	/*
+	* Comprobacion de que los parametros de entrada son correctos
+	*/
+	if ((fd == -1) || (Datos == NULL) || (Longitud < 1))
+		return -1;
+
+	/*
+	* Mientras no hayamos leido todos los datos solicitados
+	*/
+	while (Leido < Longitud)
+	{
+		Aux = read (fd, Datos + Leido, Longitud - Leido);
+		if (Aux > 0)
+		{
+			/* 
+			* Si hemos conseguido leer datos, incrementamos la variable
+			* que contiene los datos leidos hasta el momento
+			*/
+			Leido = Leido + Aux;
+		}
+		else
+		{
+			/*
+			* Si read devuelve 0, es que se ha cerrado el socket. Devolvemos
+			* los caracteres leidos hasta ese momento
+			*/
+			if (Aux == 0) 
+				return Leido;
+			if (Aux == -1)
+			{
+				/*
+				* En caso de error, la variable errno nos indica el tipo
+				* de error. 
+				* El error EINTR se produce si ha habido alguna
+				* interrupcion del sistema antes de leer ningun dato. No
+				* es un error realmente.
+				* El error EGAIN significa que el socket no esta disponible
+				* de momento, que lo intentemos dentro de un rato.
+				* Ambos errores se tratan con una espera de 100 microsegundos
+				* y se vuelve a intentar.
+				* El resto de los posibles errores provocan que salgamos de 
+				* la funcion con error.
+				*/
+				switch (errno)
+				{
+					case EINTR:
+					case EAGAIN:
+						usleep (100);
+						break;
+					default:
+						return -1;
+				}
+			}
+		}
+	}
+
+	/*
+	* Se devuelve el total de los caracteres leidos
+	*/
+	return Leido;
+}
+
+/*
+* Escribe dato en el socket cliente. Devuelve numero de bytes escritos,
+* o -1 si hay error.
+*/
+int MyFrame::Escribe_Socket (int fd, char *Datos, int Longitud)
+{
+	int Escrito = 0;
+	int Aux = 0;
+
+	/*
+	* Comprobacion de los parametros de entrada
+	*/
+	if ((fd == -1) || (Datos == NULL) || (Longitud < 1))
+		return -1;
+
+	/*
+	* Bucle hasta que hayamos escrito todos los caracteres que nos han
+	* indicado.
+	*/
+	while (Escrito < Longitud)
+	{
+		Aux = write (fd, Datos + Escrito, Longitud - Escrito);
+		if (Aux > 0)
+		{
+			/*
+			* Si hemos conseguido escribir caracteres, se actualiza la
+			* variable Escrito
+			*/
+			Escrito = Escrito + Aux;
+		}
+		else
+		{
+			/*
+			* Si se ha cerrado el socket, devolvemos el numero de caracteres
+			* leidos.
+			* Si ha habido error, devolvemos -1
+			*/
+			if (Aux == 0)
+				return Escrito;
+			else
+				return -1;
+		}
+	}
+
+	/*
+	* Devolvemos el total de caracteres leidos
+	*/
+	return Escrito;
 }
