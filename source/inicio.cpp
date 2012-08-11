@@ -32,6 +32,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 	EVT_MENU(ID_AZPCLIENTE, MyFrame::AZPCliente)
 	EVT_MENU(ID_INSTRUCCIONES, MyFrame::OnInstrucciones)
 	EVT_MENU(ID_NEWGAME, MyFrame::NewGame)
+	EVT_MENU(ID_MODS, MyFrame::CheckearMods)
 	EVT_KEY_DOWN(MyFrame::OnTecla)	
 	EVT_TIMER(TIMER_ID, MyFrame::ComprobarMulti)
 END_EVENT_TABLE()
@@ -141,6 +142,7 @@ MyFrame::MyFrame(const wxString& title)
 
 	Connect(ID_JUGAR, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnJugar));
 	Connect(ID_USER, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnInstrucciones));
+	Connect(ID_ACTUALIZAR, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnActualizar));
 
 #if wxUSE_MENUS
     // create a menu bar
@@ -152,6 +154,7 @@ MyFrame::MyFrame(const wxString& title)
     helpMenu->Append(Minimal_About, "A&cerca\tF1", "Acerca de Azpazeta");
 	fileMenu->Append(ID_AZPCLIENTE, "&Conectar con server", "Jugar multijugador");
 	fileMenu->Append(ID_NEWGAME, "&Nuevo juego","Nueva partida");
+	fileMenu->Append(ID_MODS, "C&heckear mods","Comprueba los mods instalados");
 	fileMenu->Append(ID_ACTUALIZAR, "A&ctualizar", "Actualizar Azpazeta");
 	fileMenu->Append(ID_NET, "&Mas productos de Divel", "Mas productos de Divel");	
     fileMenu->Append(Minimal_Quit, "&Salir\tAlt-X", "Salir sin guardar");
@@ -219,9 +222,12 @@ void MyFrame::OnNet(wxCommandEvent& WXUNUSED(event))
 }
 void MyFrame::OnActualizar(wxCommandEvent& WXUNUSED(event))
 {
-	#ifdef LINUX
-	wxShell("update-manager -d");//Solo Ubuntu
-	#endif
+	//#ifdef LINUX
+	//wxShell("update-manager -d");//Solo Ubuntu
+	//#endif
+	AZPUpdater* azpupdater;
+	azpupdater=new AZPUpdater();
+	azpupdater->CheckUpdates();
 }
 void MyFrame::OnInstrucciones(wxCommandEvent& WXUNUSED(event))
 {
@@ -1143,4 +1149,10 @@ void MyFrame::NewGame(wxCommandEvent& event)
 	mision=0;
 	level=0;
 	MyFrame::Stage1();
+}
+void MyFrame::CheckearMods(wxCommandEvent& event)
+{
+	ModLoader* modsystem;
+	modsystem=new ModLoader();
+	modsystem->CheckMod();
 }

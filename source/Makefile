@@ -8,7 +8,7 @@ PRE = -DIDIOMA=ES -DLINUX
 SRC = inicio.cpp
 OBJ = VarGlobal.o Inicio.o save.o tren.o chr_taskbar.o dkey.o police.o hiper.o
 EXIT = Azpazeta
-LIBFLAGS = `wx-config --libs` `pkg-config --libs glib-2.0 gtk+-2.0` -lnotify
+LIBFLAGS = `wx-config --libs` `pkg-config --libs glib-2.0 gtk+-2.0` -L. -lnotify -lmodloader -lazpupdater
 
 
 # Reglas explicitas
@@ -34,6 +34,16 @@ chr_taskbar.o:
 manual:
 	g++ -c inicio.cpp $(CFLAGS) -DIDIOMA=ES -o inicio.o
 	g++ -o Azpazeta inicio.o $(LIBFLAGS) 
+modloader:
+	g++ -fPIC -c -o libmodloader.o libmodloader.cpp $(CFLAGS)
+	g++ -shared -fPIC -o libmodloader.so libmodloader.o
+	sudo cp libmodloader.so /opt/extras.ubuntu.com/azpazeta/lib/
+azpupdater:
+	g++ -fPIC -c -o libazpupdater.o libazpupdater.cpp $(CFLAGS)
+	g++ -shared -fPIC -o libazpupdater.so libazpupdater.o
+	sudo cp libazpupdater.so /opt/extras.ubuntu.com/azpazeta/lib/
+
+
 
 clean:
 	$(RM) $(OBJ)

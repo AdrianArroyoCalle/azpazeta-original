@@ -6,6 +6,7 @@
 #include <wx/aboutdlg.h>
 #include <fstream>
 #include <iostream>
+#include "libmodloader.h"
 #include <assert.h>
 #include <iostream>
 #include "tren.h"
@@ -49,6 +50,7 @@
 #include <memory>
 #include "hiper.h"
 #include <wx/mediactrl.h>
+#include "azpupdater.h"
 using namespace std;
 
 #ifdef __BORLANDC__
@@ -129,6 +131,7 @@ public:
 	void Stage7();
 	void Stage11();
 	void Load();
+	void CheckearMods(wxCommandEvent& event);
 	void ComprobarMulti(wxTimerEvent& event);
 	void NewGame(wxCommandEvent& event);
 	int Lee_Socket (int fd, char *Datos, int Longitud);
@@ -188,6 +191,7 @@ enum
 	ID_AZPCLIENTE = 1024,
 	TIMER_ID,
 	ID_NEWGAME,
+	ID_MODS,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
