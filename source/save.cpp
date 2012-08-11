@@ -10,7 +10,7 @@ SaveDialog::SaveDialog()
 {
 	wxInitAllImageHandlers();
         wxPanel* panelSave=new wxPanel(this);
-	wxBitmap estacion("/usr/share/Azpazeta/media/save.png",wxBITMAP_TYPE_PNG);
+	wxBitmap estacion("/opt/extras.ubuntu.com/azpazeta/media/save.png",wxBITMAP_TYPE_PNG);
 	wxStaticBitmap* fondo_estacion=new wxStaticBitmap(panelSave, wxID_ANY, estacion, wxPoint(-1,-1));
         guardar_std=new wxButton(panelSave,ID_SAVE1,wxT("Guardar"),wxPoint(100,50));
         cargar_std=new wxButton(panelSave,ID_SAVE2,wxT("Cargar"),wxPoint(100,100));

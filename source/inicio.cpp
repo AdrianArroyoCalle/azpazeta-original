@@ -14,8 +14,8 @@
 static char *Id="$Id$";
 static char *Author="$Author$";
 int AZPServer;
-extern int money, level, city, mision, aux, droga, blacklist, sobornos, socio, electro, food, textil;
-typedef struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;int socio;int electro;int food;int textil;} AZPServerData;
+extern int money, level, city, mision, aux, droga, blacklist, sobornos, socio, electro, food, textil,rich;
+typedef struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;int socio;int electro;int food;int textil;int rich;} AZPServerData;
 typedef struct MyEstado{bool bien;int moneyotro;} MyEstado;
 #include "inicio.hpp"
 // ----------------------------------------------------------------------------
@@ -59,7 +59,7 @@ bool MyApp::OnInit()
 {
 	wxInitAllImageHandlers();
 	wxBitmap splashbitmap;
-  	if (splashbitmap.LoadFile("/usr/share/Azpazeta/media/splash.png", wxBITMAP_TYPE_PNG))
+  	if (splashbitmap.LoadFile("/opt/extras.ubuntu.com/azpazeta/media/splash.png", wxBITMAP_TYPE_PNG))
   	{
       	wxSplashScreen* splash = new wxSplashScreen(splashbitmap,
           wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
@@ -115,7 +115,7 @@ MyFrame::MyFrame(const wxString& title)
 {
     // set the frame icon
     SetIcon(wxICON(Icono64));
-	FILE* PointMash;
+	/*FILE* PointMash;
 	PointMash=fopen("/usr/share/Azpazeta/Res.cfg","r");
 	if(PointMash){
 	fscanf(PointMash,"RES=%d:%d",&x,&y);
@@ -123,7 +123,8 @@ MyFrame::MyFrame(const wxString& title)
 	adrx=x/2;
 	adry=y/2;
 	fclose(PointMash);
-	}else{wxMessageBox(wxT("No se ha encontrado archivo de resolución PointMash en: /usr/share/Azpazeta/Res.cfg"),wxT("Error 201"),wxICON_ERROR|wxOK);SetSize(800,600); x=800; y=600;}
+	}else{wxMessageBox(wxT("No se ha encontrado archivo de resolución PointMash en: /usr/share/Azpazeta/Res.cfg"),wxT("Error 201"),wxICON_ERROR|wxOK);SetSize(800,600); x=800; y=600;}*/
+	SetSize(800, 600); x=800; y=600;
 	panel = new wxPanel(this);
 	wxInitAllImageHandlers();
 	/*wxImage portada("/usr/share/Azpazeta/media/Portada.png", wxBITMAP_TYPE_PNG);
@@ -131,7 +132,7 @@ MyFrame::MyFrame(const wxString& title)
 	portadaSize=portada.Scale(x/2,y/2);
 	portadaSize.SaveFile("/usr/share/Azpazeta/media/newres/Portada.png",wxBITMAP_TYPE_PNG);
 	wxBitmap portadaBMP("/usr/share/Azpazeta/media/newres/Portada.png", wxBITMAP_TYPE_PNG);*/
-	wxBitmap portadaBMP("/usr/share/Azpazeta/media/inicio.png", wxBITMAP_TYPE_PNG);
+	wxBitmap portadaBMP("/opt/extras.ubuntu.com/azpazeta/media/inicio.png", wxBITMAP_TYPE_PNG);
 	Portada = new wxStaticBitmap(panel, ID_DIBUJO, portadaBMP, wxPoint(-1,-1));
 	if(fachada!=1){
 	actualizar=new wxButton(panel, ID_ACTUALIZAR, wxT("Actualizar juego"), wxPoint(100,500));
@@ -214,11 +215,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnNet(wxCommandEvent& WXUNUSED(event))
 {
 	//DEBUG MODE
-	wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
-	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
-	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
-	Stage3();
-	mision=15;
+
 }
 void MyFrame::OnActualizar(wxCommandEvent& WXUNUSED(event))
 {
@@ -242,17 +239,20 @@ void MyFrame::OnJugar(wxCommandEvent& WXUNUSED(event))
 	case 5: wxMessageBox("Do you know that you can colaborate in launchpad.net/azpazeta","Today's tip", wxICON_INFORMATION|wxOK);break;
 	}
 	//wxSound("/usr/share/Azpazeta/audio/Hip-hop.wav").Play(wxSOUND_ASYNC|wxSOUND_LOOP);
-	FILE* partida;
+	/*FILE* partida;
 	wxString archivo=wxT("/usr/share/Azpazeta/save/save.azp");
 	partida=fopen("/usr/share/Azpazeta/save/save.azp","r");
 	if(partida){
-	fclose(partida);
+	fclose(partida);*/
 	char *home;
 	home=getenv("HOME");
 	wxString pathgeneral=wxString::Format("mkdir -p %s/.azpazeta",home);
 	system(pathgeneral.c_str());
 	wxString pathguardar=wxString::Format("%s/.azpazeta/save.azp",home);
-
+	FILE* partida;
+	partida=fopen(pathguardar.c_str(),"r");
+	if(partida){
+	fclose(partida);
 	SaveDialog* extrasavedlg=new SaveDialog();
         extrasavedlg->Cargar(pathguardar);
         extrasavedlg->Destroy();
@@ -275,10 +275,10 @@ void MyFrame::OnJugar(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnTecla(wxKeyEvent& event)
 {
  int ascii = event.GetKeyCode();
-	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixup("/usr/share/Azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixleft("/usr/share/Azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixright("/usr/share/Azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);
+	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap adrixup("/opt/extras.ubuntu.com/azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
+	wxBitmap adrixleft("/opt/extras.ubuntu.com/azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
+	wxBitmap adrixright("/opt/extras.ubuntu.com/azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);
 switch(city){
 	case 1:
 	switch(ascii)
@@ -316,7 +316,7 @@ switch(city){
 		{if(adrx>=140){
 		switch(mision){
 		case 0:{
-		wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
+		wxBitmap bocadillo("/opt/extras.ubuntu.com/azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
 		Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
 		cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT("Quien eres?\nNo te conozco.\nEres el nuevo?\nPresiona ENTER"), wxPoint(625, 470));
 		mision++;
@@ -750,11 +750,11 @@ switch(city){
 }
 
 void MyFrame::Stage1()
-{	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+{	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	/*wxBitmap adrixup("/usr/share/Azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
 	wxBitmap adrixleft("/usr/share/Azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
 	wxBitmap adrixright("/usr/share/Azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);*/
-	wxBitmap cap1dib1("/usr/share/Azpazeta/media/1x1.png", wxBITMAP_TYPE_PNG);
+	wxBitmap cap1dib1("/opt/extras.ubuntu.com/azpazeta/media/1x1.png", wxBITMAP_TYPE_PNG);
 	Portada->SetBitmap(cap1dib1);
 	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(x/2,y/2));
 	actualizar->Destroy();
@@ -766,11 +766,11 @@ void MyFrame::Stage1()
 
 void MyFrame::Stage2()
 {
-	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	/*wxBitmap adrixup("/usr/share/Azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
 	wxBitmap adrixleft("/usr/share/Azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
 	wxBitmap adrixright("/usr/share/Azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);*/
-	wxBitmap inem("/usr/share/Azpazeta/media/INEM.png", wxBITMAP_TYPE_PNG);
+	wxBitmap inem("/opt/extras.ubuntu.com/azpazeta/media/INEM.png", wxBITMAP_TYPE_PNG);
 	Portada->SetBitmap(inem);
 	adrx=500;
 	adry=500;
@@ -779,11 +779,11 @@ void MyFrame::Stage2()
 }
 void MyFrame::Stage3()
 {
-		wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+		wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	/*wxBitmap adrixup("/usr/share/Azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
 	wxBitmap adrixleft("/usr/share/Azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
 	wxBitmap adrixright("/usr/share/Azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);*/
-	wxBitmap centro1("/usr/share/Azpazeta/media/Centro1.png", wxBITMAP_TYPE_PNG);
+	wxBitmap centro1("/opt/extras.ubuntu.com/azpazeta/media/Centro1.png", wxBITMAP_TYPE_PNG);
 	Portada->SetBitmap(centro1);
 	adrx=500;
 	adry=500;
@@ -792,8 +792,8 @@ void MyFrame::Stage3()
 }
 void MyFrame::Stage4()
 {
-	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
-	wxBitmap centro2("/usr/share/Azpazeta/media/Centro2.png",wxBITMAP_TYPE_PNG);
+	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap centro2("/opt/extras.ubuntu.com/azpazeta/media/Centro2.png",wxBITMAP_TYPE_PNG);
 	Portada->SetBitmap(centro2);
 	adrx=300;
 	adry=300;
@@ -802,8 +802,8 @@ void MyFrame::Stage4()
 }
 void MyFrame::Stage5()
 {
-	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
-	wxBitmap centro3("/usr/share/Azpazeta/media/Centro3.png", wxBITMAP_TYPE_PNG);
+	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap centro3("/opt/extras.ubuntu.com/azpazeta/media/Centro3.png", wxBITMAP_TYPE_PNG);
 	Portada->SetBitmap(centro3);
 	adrx=400;
 	adry=400;
@@ -812,8 +812,8 @@ void MyFrame::Stage5()
 }
 void MyFrame::Stage6()
 {
-		wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
-	wxBitmap hiper("/usr/share/Azpazeta/media/Hiper.png", wxBITMAP_TYPE_PNG);
+		wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap hiper("/opt/extras.ubuntu.com/azpazeta/media/Hiper.png", wxBITMAP_TYPE_PNG);
 	Portada->SetBitmap(hiper);
 	adrx=300;
 	adry=300;
@@ -822,8 +822,8 @@ void MyFrame::Stage6()
 }
 void MyFrame::Stage7()
 {
-	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
-	wxBitmap golf("/usr/share/Azpazeta/media/Golf.png", wxBITMAP_TYPE_PNG);
+	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap golf("/opt/extras.ubuntu.com/azpazeta/media/Golf.png", wxBITMAP_TYPE_PNG);
 	Portada->SetBitmap(golf);
 	adrx=300;
 	adry=300;
@@ -832,8 +832,8 @@ void MyFrame::Stage7()
 }
 void MyFrame::Stage11()
 {
-	wxBitmap adrixdown("/usr/share/Azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
-	wxBitmap gorguez("/usr/share/Azpazeta/media/Gorguez.png", wxBITMAP_TYPE_PNG);
+	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	wxBitmap gorguez("/opt/extras.ubuntu.com/azpazeta/media/Gorguez.png", wxBITMAP_TYPE_PNG);
 	Portada->SetBitmap(gorguez);
 	adrx=300;
 	adry=300;
@@ -842,7 +842,7 @@ void MyFrame::Stage11()
 }
 void MyFrame::Load()
 {
-	wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
+	wxBitmap bocadillo("/opt/extras.ubuntu.com/azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
 	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
 	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
 	/*actualizar->Destroy();
@@ -964,6 +964,7 @@ void MyFrame::AZPCliente(wxCommandEvent& event)
 	datos.textil=textil;
 	datos.sobornos=sobornos;
 	datos.mision=mision;
+	datos.rich=rich;
 	write(AZPServer, &datos, sizeof(datos));
 	read(AZPServer, &myestado, sizeof(myestado));
 	if(myestado.bien==true){wxMessageBox(wxString::Format("Bien, el otro tienen menos, concretamente: %d", myestado.moneyotro));}
@@ -974,7 +975,7 @@ void MyFrame::AZPCliente(wxCommandEvent& event)
 	timer->Start(60000, false);
 	wxMessageBox(wxT("Empezando nueva partida"), wxT("Azpazeta"),wxICON_INFORMATION|wxOK);
 	newname=wxGetTextFromUser(wxT("Introduce tu nombre para la partida"),wxT("Azpazeta"),wxT(""));
-	wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
+	wxBitmap bocadillo("/opt/extras.ubuntu.com/azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
 	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
 	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
 	actualizar=new wxButton(panel, wxID_ANY, "...");
@@ -1130,7 +1131,7 @@ void MyFrame::NewGame(wxCommandEvent& event)
 {
 	wxMessageBox(wxT("Empezando nueva partida"), wxT("Azpazeta"),wxICON_INFORMATION|wxOK);
 	newname=wxGetTextFromUser(wxT("Introduce tu nombre para la partida"),wxT("Azpazeta"),wxT(""));
-	wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
+	wxBitmap bocadillo("/opt/extras.ubuntu.com/azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
 	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
 	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
 	actualizar=new wxButton(panel, wxID_ANY, "...");

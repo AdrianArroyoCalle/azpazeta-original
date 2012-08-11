@@ -17,3 +17,4 @@ int socio=0;
 int electro=0;
 int food=0; 
 int textil=0;
+int rich=0;

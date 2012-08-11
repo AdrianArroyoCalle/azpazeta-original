@@ -1,8 +1,10 @@
 //Hiper.cpp
 #include "hiper.h"
 #include <wx/mediactrl.h>
-extern int socio, money, electro, food, textil, droga, blacklist;
+extern int socio, money, electro, food, textil, droga, blacklist, rich;
 int estadoHiper=0;
+	int precioproc[4];
+	static int precioshiper[4]={100,200,300,50};
 
 Hiper::Hiper() : wxDialog(NULL, wxID_ANY, wxT("Cadena Inc."), wxPoint(-1,-1), wxSize(400,400))
 {
@@ -21,8 +23,7 @@ Hiper::Hiper() : wxDialog(NULL, wxID_ANY, wxT("Cadena Inc."), wxPoint(-1,-1), wx
 }
 void Hiper::Comprar(wxCommandEvent& event)
 {
-	int precioproc[4];
-	static int precioshiper[4]={100,200,300,50};
+
 	if(estadoHiper==0){
 	info_hiper->SetLabel("Compra lo que desees al precio indicado (o no)");
 	wxProgressDialog esperar("Cadena Inc.","Buscando ofertas...",4);
@@ -64,7 +65,25 @@ void Hiper::Tour(wxCommandEvent& event)
 	int hora=tmP->tm_hour;
 	int minutos=tmP->tm_min;
 	int segundos=tmP->tm_sec;
-	wxMessageBox(wxString::Format("Son las %d:%d:%d!! Como quieres que esten despiertos",hora,minutos,segundos));}
+	wxMessageBox(wxString::Format("Son las %d:%d:%d!! Como quieres que esten despiertos",hora,minutos,segundos));}else{
+
+	srand(time(NULL));
+	int lazar=rand()%10+1;
+	switch(lazar){
+	case 1:wxMessageBox("La paella sabe extrana, hay droga, creo que es ilegal...");money-=precioshiper[precioproc[0]]; droga++;break;
+	case 2:{if(droga!=0){wxMessageBox("Tenias droga y la policía te ha visto. Pierdes la droga y debes pagar 2000 $");money-=2000;droga=0;}}break;
+	default:wxMessageBox("Felicidades, comprado correctamente");money-=precioshiper[precioproc[0]]; food++;
+	}
+	//Poner viejos botones
+	comprar->SetLabel("Comprar por catalogo");
+	tour->SetLabel("Tour completo");
+	trabajar->SetLabel("Trabajar (2 min)");
+	socios->SetLabel("Hacerse socio");
+	estadoHiper=0;
+
+
+
+	}
 }
 void Hiper::Trabajar(wxCommandEvent& event)
 {
@@ -77,6 +96,24 @@ void Hiper::Trabajar(wxCommandEvent& event)
 	}
 	money+=200;
 
+	}else{
+	srand(time(NULL));
+	int lazar=rand()%10+1;
+	switch(lazar){
+	case 1:wxMessageBox("En los bolsillos hay algo extrano, hay droga, creo que es ilegal...");money-=precioshiper[precioproc[0]]; droga++;break;
+	case 2:{if(droga!=0){wxMessageBox("Tenias droga y la policía te ha visto. Pierdes la droga y debes pagar 2000 $");money-=2000;droga=0;}}break;
+	default:wxMessageBox("Felicidades, comprado correctamente");money-=precioshiper[precioproc[0]]; textil++;
+	}
+	//Poner viejos botones
+	comprar->SetLabel("Comprar por catalogo");
+	tour->SetLabel("Tour completo");
+	trabajar->SetLabel("Trabajar (2 min)");
+	socios->SetLabel("Hacerse socio");
+	estadoHiper=0;
+
+
+
+
 	}
 }
 void Hiper::Suscribirse(wxCommandEvent& event)
@@ -86,5 +123,25 @@ void Hiper::Suscribirse(wxCommandEvent& event)
 	if(dalalai==wxYES){
 	socio=1;money-=300;
 	}
+	}else{
+	srand(time(NULL));
+	int lazar=rand()%10+1;
+	switch(lazar){
+	case 1:wxMessageBox("Te dan una caja extrana, hay droga, creo que es ilegal...");money-=precioshiper[precioproc[0]]; droga++;break;
+	case 2:{if(droga!=0){wxMessageBox("Tenias droga y la policía te ha visto. Pierdes la droga y debes pagar 2000 $");money-=2000;droga=0;}}break;
+	case 3:wxMessageBox("Te ha tocado ropa de moda");money-=precioshiper[precioproc[0]]; textil++;break;
+	case 4:wxMessageBox("Te ha tocado un movil Android");money-=precioshiper[precioproc[0]]; electro++;break;
+	case 5:wxMessageBox("Te ha tocado una gran paella");money-=precioshiper[precioproc[0]]; food++;break;
+	default:wxMessageBox("Te ha tocado un producto lujoso, pero inutil");money-=precioshiper[precioproc[0]]; rich++;
+	}
+	//Poner viejos botones
+	comprar->SetLabel("Comprar por catalogo");
+	tour->SetLabel("Tour completo");
+	trabajar->SetLabel("Trabajar (2 min)");
+	socios->SetLabel("Hacerse socio");
+	estadoHiper=0;
+
+
+
 	}
 }

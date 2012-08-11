@@ -2,11 +2,11 @@
 Encoding=UTF-8
 Name=Azpazeta
 Comment=Azpazeta, the economic and strategy game.
-Comment[es]=Astrotite, el juego económico y estratégico.
-Exec=Azpazeta %f
+Comment[es]=Azpazeta, el juego económico y estratégico.
+Exec="/opt/extras.ubuntu.com/azpazeta/Azpazeta" %f
 Terminal=false
 Type=Application
-Icon=azpazeta.png
+Icon="/opt/extras.ubuntu.com/azpazeta/media/Icono64.png"
 Categories=GTK;KDE;Games;
 MimeType=application/x-azpazeta-savefile
 Name[es_ES]=Azpazeta

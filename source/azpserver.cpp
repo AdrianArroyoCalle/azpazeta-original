@@ -18,7 +18,7 @@
 int Lee_Socket (int fd, char *Datos, int Longitud);
 
 int Escribe_Socket (int fd, char *Datos, int Longitud);
-typedef struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;int socio;int electro;int food;int textil;} AZPServerData;
+typedef struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;int socio;int electro;int food;int textil;int rich;} AZPServerData;
 typedef struct MyEstado{bool bien;int moneyotro;} MyEstado;
 int main()
 {

@@ -104,7 +104,7 @@ TrenDialog::TrenDialog()
 	wxPanel* panelTren=new wxPanel(this);
 	wxPrintf("Final");
 	wxInitAllImageHandlers();
-	wxBitmap estacion("/usr/share/Azpazeta/media/tren.png",wxBITMAP_TYPE_PNG);
+	wxBitmap estacion("/opt/extras.ubuntu.com/azpazeta/media/tren.png",wxBITMAP_TYPE_PNG);
 	wxStaticBitmap* fondo_estacion=new wxStaticBitmap(panelTren, wxID_ANY, estacion, wxPoint(-1,-1));
 	wxStaticText* cuantomoney=new wxStaticText(panelTren, wxID_ANY, wxString::Format(wxT("Dinero actual: %d"),money));
 	ciudad=new wxStaticText(panelTren, wxID_ANY, wxT("Destino\t\t\tHora salida\t\t\tPrecio"),wxPoint(2, 100));
