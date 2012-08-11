@@ -130,6 +130,7 @@ public:
 	void Stage11();
 	void Load();
 	void ComprobarMulti(wxTimerEvent& event);
+	void NewGame(wxCommandEvent& event);
 	int Lee_Socket (int fd, char *Datos, int Longitud);
 	int Escribe_Socket (int fd, char *Datos, int Longitud);
 	wxImage Play;
@@ -186,6 +187,7 @@ enum
 	ID_REGALOS = 1023,
 	ID_AZPCLIENTE = 1024,
 	TIMER_ID,
+	ID_NEWGAME,
 
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac

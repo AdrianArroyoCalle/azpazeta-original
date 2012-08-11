@@ -31,6 +31,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 	EVT_MENU(ID_NET, MyFrame::OnNet)
 	EVT_MENU(ID_AZPCLIENTE, MyFrame::AZPCliente)
 	EVT_MENU(ID_INSTRUCCIONES, MyFrame::OnInstrucciones)
+	EVT_MENU(ID_NEWGAME, MyFrame::NewGame)
 	EVT_KEY_DOWN(MyFrame::OnTecla)	
 	EVT_TIMER(TIMER_ID, MyFrame::ComprobarMulti)
 END_EVENT_TABLE()
@@ -148,7 +149,8 @@ MyFrame::MyFrame(const wxString& title)
     helpMenu = new wxMenu;
 	helpMenu->Append(ID_INSTRUCCIONES, "&Instrucciones", "Instrucciones sobre Azpazeta");
     helpMenu->Append(Minimal_About, "A&cerca\tF1", "Acerca de Azpazeta");
-	fileMenu->Append(ID_AZPCLIENTE, "Conectar con server", "Jugar multijugador");
+	fileMenu->Append(ID_AZPCLIENTE, "&Conectar con server", "Jugar multijugador");
+	fileMenu->Append(ID_NEWGAME, "&Nuevo juego","Nueva partida");
 	fileMenu->Append(ID_ACTUALIZAR, "A&ctualizar", "Actualizar Azpazeta");
 	fileMenu->Append(ID_NET, "&Mas productos de Divel", "Mas productos de Divel");	
     fileMenu->Append(Minimal_Quit, "&Salir\tAlt-X", "Salir sin guardar");
@@ -716,7 +718,7 @@ switch(city){
 	{	
 	//366-222
 		case WXK_LEFT:
-
+		
 		break;
 		case WXK_UP:
 
@@ -970,7 +972,20 @@ void MyFrame::AZPCliente(wxCommandEvent& event)
 	wxTimer* timer;
 	timer=new wxTimer(this, TIMER_ID);
 	timer->Start(60000, false);
-	
+	wxMessageBox(wxT("Empezando nueva partida"), wxT("Azpazeta"),wxICON_INFORMATION|wxOK);
+	newname=wxGetTextFromUser(wxT("Introduce tu nombre para la partida"),wxT("Azpazeta"),wxT(""));
+	wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
+	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
+	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
+	actualizar=new wxButton(panel, wxID_ANY, "...");
+	jugar=new wxButton(panel, wxID_ANY, "...");
+	instrucciones=new wxButton(panel, wxID_ANY, "...");
+	city=1;
+	Adrix->Destroy();
+	money=2000;
+	mision=0;
+	level=0;
+	MyFrame::Stage1();
 
 }
 int MyFrame::Lee_Socket (int fd, char *Datos, int Longitud)
@@ -1109,4 +1124,22 @@ AZPServerData datos;
 	read(AZPServer, &myestado, sizeof(myestado));
 	if(myestado.bien==true){wxMessageBox(wxString::Format("Bien, el otro tienen menos, concretamente: %d", myestado.moneyotro));}
 	if(myestado.bien==false){wxMessageBox(wxString::Format("Mal, el otro tiene mas, concretamente: %d", myestado.moneyotro));}
+}
+
+void MyFrame::NewGame(wxCommandEvent& event)
+{
+	wxMessageBox(wxT("Empezando nueva partida"), wxT("Azpazeta"),wxICON_INFORMATION|wxOK);
+	newname=wxGetTextFromUser(wxT("Introduce tu nombre para la partida"),wxT("Azpazeta"),wxT(""));
+	wxBitmap bocadillo("/usr/share/Azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
+	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
+	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
+	actualizar=new wxButton(panel, wxID_ANY, "...");
+	jugar=new wxButton(panel, wxID_ANY, "...");
+	instrucciones=new wxButton(panel, wxID_ANY, "...");
+	city=1;
+	Adrix->Destroy();
+	money=2000;
+	mision=0;
+	level=0;
+	MyFrame::Stage1();
 }

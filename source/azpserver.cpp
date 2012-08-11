@@ -124,8 +124,10 @@ int main()
 	write(socketCliente[0],&myestado1, sizeof(myestado1));
 	write(socketCliente[1],&myestado2, sizeof(myestado2));
 
-	//Repeticion
-read(socketCliente[0],&datos1, sizeof(datos1));
+	//Bucle infinito
+	int infinito=0;
+	while(infinito==0){
+	read(socketCliente[0],&datos1, sizeof(datos1));
 	read(socketCliente[1],&datos2, sizeof(datos2));
 	if(datos1.money>datos2.money){
 	myestado1.bien=true;
@@ -140,7 +142,7 @@ read(socketCliente[0],&datos1, sizeof(datos1));
 	myestado2.moneyotro=datos1.money;}
 	write(socketCliente[0],&myestado1, sizeof(myestado1));
 	write(socketCliente[1],&myestado2, sizeof(myestado2));
-
+	}
 
 	close (socketCliente[0]);
 	close(socketCliente[1]);
