@@ -878,6 +878,8 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
 
 void MyFrame::AZPCliente(wxCommandEvent& event)
 {
+	int siono=wxMessageBox("Quieres utilizar IPv6?\nSi no se usara IPv4","Divel Network",wxICON_QUESTION|wxYES_NO);
+	if(siono==wxNO){
 	int AZPServer;
 	char Cadena[1024];
 	char ip[1024];
@@ -900,7 +902,39 @@ void MyFrame::AZPCliente(wxCommandEvent& event)
 	Escribe_Socket(AZPServer, nombreCliente1, 1024);
 	Lee_Socket(AZPServer, nombreCliente2, 1024);
 	wxMessageBox(wxString::Format("El otro jugador es: %s",nombreCliente2),"Divel Network");
+	close(AZPServer);}else{
+	//IPv6
+	int AZPServer;
+	char Cadena[1024];
+	char ip[1024];
+	char nombreCliente1[1024];
+	char nombreCliente2[1024];
+	wxString wxip=wxGetTextFromUser("Introduce la IPv6 del server de Azpazeta","Divel Network","::1");	
+	strncpy(ip, (const char*)wxip.mb_str(wxConvUTF8), 1023);
+	struct sockaddr_in6 Direccion;
+	struct servent *Puerto;
+	struct hostent *Host;
+	//Direccion.sin6_len = sizeof(Direccion);
+	//unsigned char ipv6[16]="::1";
+	inet_pton(PF_INET6, ip,&(Direccion.sin6_addr));
+	//Direccion.sin6_addr.s6_addr=inet_pton();	
+	//Direccion.sin6_addr.s6_addr=inet_addr6(ip);
+	Direccion.sin6_family = AF_INET6;
+	Direccion.sin6_port = 6996;
+	AZPServer = socket (AF_INET6, SOCK_STREAM, 0);
+	connect (AZPServer, (struct sockaddr *)&Direccion, sizeof (Direccion));
+	Lee_Socket(AZPServer, Cadena,1024);
+	wxMessageBox(wxString::Format("%s",Cadena),"Server informa",wxICON_INFORMATION|wxOK);
+	wxString onlinename=wxGetTextFromUser("Introduce tu nombre online","Divel Network","");
+	strncpy(nombreCliente1, (const char*)onlinename.mb_str(wxConvUTF8), 1023);
+	Escribe_Socket(AZPServer, nombreCliente1, 1024);
+	Lee_Socket(AZPServer, nombreCliente2, 1024);
+	wxMessageBox(wxString::Format("El otro jugador es: %s",nombreCliente2),"Divel Network");
 	close(AZPServer);
+
+
+
+		}
 
 
 }

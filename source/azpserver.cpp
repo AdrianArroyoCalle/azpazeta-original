@@ -21,6 +21,10 @@ int Escribe_Socket (int fd, char *Datos, int Longitud);
 
 int main()
 {
+	int tipoip;
+	printf("Select the type of IP:\n1. IPv4\n2. IPv6\n");
+	scanf("%d",&tipoip);
+	if(tipoip==1){
 	struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;} datos;
 	int maximo=2;
 	fd_set descriptoresLectura;
@@ -58,7 +62,51 @@ int main()
 	//Cerramos la comunicación
 	close (socketCliente[0]);
 	close(socketCliente[1]);
+	close(AZPServer);}else{
+	//IPv6
+	struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;} datos;
+	int maximo=2;
+	fd_set descriptoresLectura;
+	int socketCliente[2];
+	int numeroClientes; 
+	int AZPServer;
+	char Cadena[2048];
+	char nombreCliente1[1024];
+	char nombreCliente2[1024];
+	struct sockaddr_in6 Direccion;
+	struct sockaddr Cliente;
+	socklen_t Longitud_Cliente;
+	struct servent *Puerto;
+	//Direccion.sin6_len = sizeof(Direccion);
+	AZPServer=socket (AF_INET6, SOCK_STREAM, 0);
+	Direccion.sin6_family = AF_INET6;
+	Direccion.sin6_port = 6996;
+	//Direccion.sin6_addr.s6_addr =INADDR_ANY;
+	Direccion.sin6_addr=  in6addr_any;
+	bind (AZPServer, (struct sockaddr *)&Direccion, sizeof (Direccion));
+	listen (AZPServer, 1);
+	Longitud_Cliente = sizeof (Cliente);
+	socketCliente[0] = accept (AZPServer, &Cliente, &Longitud_Cliente);
+	socketCliente[1] = accept(AZPServer, &Cliente, &Longitud_Cliente);
+	printf("2 clientes conectados");
+	//Les informamos
+	Escribe_Socket(socketCliente[0], "2 clientes conectados\nEmpezando juego\n", 1024);
+	Escribe_Socket(socketCliente[1], "2 clientes conectados\nEmpezando juego\n", 1024);
+	//Recibimos sus nombres
+	Lee_Socket (socketCliente[0], nombreCliente1, 1024);
+	Lee_Socket (socketCliente[1], nombreCliente2, 1024);
+	//Le mostramos el nombre del otro
+	Escribe_Socket(socketCliente[0], nombreCliente2, 1024);
+	Escribe_Socket(socketCliente[1], nombreCliente1, 1024);
+
+	//Cerramos la comunicación
+	close (socketCliente[0]);
+	close(socketCliente[1]);
 	close(AZPServer);
+
+
+
+		}
 
 }
 

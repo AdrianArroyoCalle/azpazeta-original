@@ -14,7 +14,7 @@
 #define POLICE_102 "Informar de producto ilegal"
 #define POLICE_103 "Soborno policial"
 #define HIPER_101 "Bienvenido a Cadena Inc.\nAqui podras comprar productos y ganar dinero como empleado\nPuedes hacer un tour para ver las ofertas\n o hacerte socio (100 $) para tener mejores ofertas"
-
+#define COMPRAR_101 "Compra aqui los productos en oferta\n No se pueden devolver"
 #else
 //Inglés
 
