@@ -1,0 +1,7 @@
+Son ZIPs con varias carpetas y archivos
+
+AZPGeneral -> Datos generales del juego
+META-DATA -> Datos del usuario
+SERVER-DATA -> Datos sobre multijugador y servers
+SKIN-DATA -> Skins para Adrix
+TEXTURE-DATA -> Texture Packs del jugador
