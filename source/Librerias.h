@@ -52,6 +52,11 @@
 #include <wx/mediactrl.h>
 #include "azpupdater.h"
 #include "golf.h"
+#include "dialogbox.h"
+#include <wx/glcanvas.h>
+#include <wx/gdicmn.h>
+#include <GL/glu.h>
+#include <math.h>
 using namespace std;
 
 #ifdef __BORLANDC__

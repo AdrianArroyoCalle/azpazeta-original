@@ -172,6 +172,7 @@ MyFrame::MyFrame(const wxString& title)
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
     SetStatusText("Azpazeta 1.0 Sin comprobar actualizaciones");
+	//Pantalla Completa, implementar en futuras versiones//ShowFullScreen(true, wxFULLSCREEN_ALL);
 #endif // wxUSE_STATUSBAR
 
 }
@@ -506,6 +507,8 @@ switch(city){
 		wxPrintf("Mostrando...");
 		trendlg->ShowModal();
 		trendlg->Destroy();
+		Adrix->Destroy();
+		Load();
 		break;
 		}}
                 //Piso franco
@@ -690,7 +693,11 @@ switch(city){
 		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx, adry));
 		break;
 		case WXK_UP:
-
+		if(adry<=300){}else{
+		adry--;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry));
+		}
 		break;
 		case WXK_RIGHT:
 		adrx++;
@@ -704,7 +711,7 @@ switch(city){
 		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
 		break;
 		case WXK_RETURN:
-
+		if(adry<=302 && (adrx>=382 && adrx<=440)){Golf* golfdlg; golfdlg=new Golf();golfdlg->ShowModal();golfdlg->Destroy();}
 		break;
 		case WXK_ESCAPE:
 		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
@@ -724,19 +731,42 @@ switch(city){
 	{	
 	//366-222
 		case WXK_LEFT:
-		
+		if((adrx<=405 && adry>=405) || (adrx<=150 && adry<=130)){}else{
+		adrx--;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry));
+		}
 		break;
 		case WXK_UP:
-
+		if((adrx<=150 && adry<=130) || (adrx>=555 && adry<=340)){}else{
+		adry--;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx, adry));
+		}
 		break;
 		case WXK_RIGHT:
-
+		if(adrx>=555 && (adry<=340 || adry>=505)){}else{
+		adrx++;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));
+		}
 		break;
 		case WXK_DOWN:
-
+		if((adrx<=405 && adry>=405) || (adrx>=555 && adry>=505)){}else{
+		adry++;
+		Adrix->Destroy();
+		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+		}
 		break;
 		case WXK_RETURN:
-
+		//Bread&Pan
+		if(adrx<=102 && adry<=152){
+		DialogBox* dlgbox;
+		dlgbox=new DialogBox();
+		dlgbox->ShowModal();
+		dlgbox->Destroy();
+		}else{wxMessageBox(wxString::Format("%d:%d",adrx,adry));}
+		//Estacion de Tren
 		break;
 		case WXK_ESCAPE:
 		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}

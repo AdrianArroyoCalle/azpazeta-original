@@ -34,7 +34,7 @@ using namespace std;
 	int CiudadOrden=0;
 	int precioOrden[5];
 	int PrecioOrden=0;
-	extern int money;
+	extern int money, city;
 
 class TrenDialog : public wxDialog
 {
@@ -155,12 +155,13 @@ void TrenDialog::OnQuinto(wxCommandEvent& event)
 void TrenDialog::ProcesarViajes(wxString destino, int precio)
 {
 	int realdestino;
-	if(destino=="Gorguez"){realdestino=1;}
+	if(destino=="Gorguez"){city=11;}
 	if(destino=="Centralia"){realdestino=2;}
 	if(destino=="Obscura"){realdestino=3;}
 	if(destino=="Wellville"){realdestino=4;}
 	if(destino=="Orlan\t"){realdestino=5;}
 	money=money-precio;
+	this->Destroy();
 	
 }
 #endif
