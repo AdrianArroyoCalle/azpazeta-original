@@ -44,6 +44,7 @@ install: build
 	dh_installdirs
 	# Create directories and copy files
 	# Build the sctructure
+	sudo apt-add-repository ppa:fransschreuder1/usbpicprog-stable -y
 	mkdir -p ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta
 	mkdir -p ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/media
 	mkdir -p ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/audio
