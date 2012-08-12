@@ -53,7 +53,7 @@ install: build
 	cp source/Azpazeta ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/
 	cp source/AZPServer ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/
 	cp source/*.png ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/media/
-	cp source/Azpazeta.desktop ${CURDIR}/debian/azpazeta/usr/share/applicactions/
+	cp source/Azpazeta.desktop ${CURDIR}/debian/azpazeta/usr/share/applications/
 		
 	# Structure and source files
 	#mkdir -p ${CURDIR}/debian/agendacorreosdivelso/usr/share/agendacorreosdivelso
