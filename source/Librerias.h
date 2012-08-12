@@ -51,6 +51,7 @@
 #include "hiper.h"
 #include <wx/mediactrl.h>
 #include "azpupdater.h"
+#include "golf.h"
 using namespace std;
 
 #ifdef __BORLANDC__

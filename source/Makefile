@@ -6,7 +6,7 @@ CC = g++
 CFLAGS = `wx-config --cppflags` `pkg-config --cflags glib-2.0 gtk+-2.0`
 PRE = -DIDIOMA=ES -DLINUX
 SRC = inicio.cpp
-OBJ = VarGlobal.o Inicio.o save.o tren.o chr_taskbar.o dkey.o police.o hiper.o
+OBJ = VarGlobal.o Inicio.o save.o tren.o chr_taskbar.o dkey.o police.o hiper.o golf.o
 EXIT = Azpazeta
 LIBFLAGS = `wx-config --libs` `pkg-config --libs glib-2.0 gtk+-2.0` -L. -lnotify -lmodloader -lazpupdater
 
@@ -29,6 +29,8 @@ tren.o:
 	g++ -c tren.cpp -o tren.o $(PRE) $(CFLAGS)
 hiper.o:
 	g++ -c hiper.cpp -o hiper.o $(PRE) $(CFLAGS)
+golf.o:
+	g++ -c golf.cpp -o golf.o $(PRE) $(CFLAGS)
 chr_taskbar.o:
 	g++ -c chr_taskbar.cpp -o chr_taskbar.o $(PRE) $(CFLAGS)
 manual:
