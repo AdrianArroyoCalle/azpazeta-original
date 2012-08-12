@@ -16,6 +16,7 @@
 #define HIPER_101 "Bienvenido a Cadena Inc.\nAqui podras comprar productos y ganar dinero como empleado\nPuedes hacer un tour para ver las ofertas\n o hacerte socio (100 $) para tener mejores ofertas"
 #define COMPRAR_101 "Compra aqui los productos en oferta\n No se pueden devolver"
 #define GOLF_101 "La riqueza de Azpazeta se reune aqui\nVendeles productos caros"
+#define MERCADO_101 "El mercado central de Gorguez\nAqui las tiendas compran su mercancia"
 #else
 //Inglés
 

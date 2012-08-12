@@ -6,6 +6,6 @@ xdg-mime default Azpazeta.desktop application/x-azpazeta-savefile
 xdg-mime default Azpazeta.desktop text/x-azpazeta-savefile
 #Librerias
 
-cp source/azpazeta-libs.conf /etc/ld.so.conf.d/
-ldconfig
+#cp source/azpazeta-libs.conf /etc/ld.so.conf.d/
+#ldconfig
 

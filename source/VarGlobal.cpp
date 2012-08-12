@@ -18,3 +18,4 @@ int electro=0;
 int food=0; 
 int textil=0;
 int rich=0;
+int prima=0;

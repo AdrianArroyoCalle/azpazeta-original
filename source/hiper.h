@@ -17,7 +17,8 @@ class Hiper : public wxDialog{
 		wxButton* tour;
 		wxButton* comprar;
 		wxStaticText* info_hiper;
-
+	private:
+		int precioproc[4];
 };
 
 enum{

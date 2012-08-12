@@ -223,12 +223,13 @@ void MyFrame::OnNet(wxCommandEvent& WXUNUSED(event))
 }
 void MyFrame::OnActualizar(wxCommandEvent& WXUNUSED(event))
 {
-	//#ifdef LINUX
-	//wxShell("update-manager -d");//Solo Ubuntu
-	//#endif
+	#ifdef LINUX
+	wxShell("update-manager -d");//Solo Ubuntu
+	#endif
+	/*
 	AZPUpdater* azpupdater;
 	azpupdater=new AZPUpdater();
-	azpupdater->CheckUpdates();
+	azpupdater->CheckUpdates();*/
 }
 void MyFrame::OnInstrucciones(wxCommandEvent& WXUNUSED(event))
 {
@@ -765,7 +766,14 @@ switch(city){
 		dlgbox=new DialogBox();
 		dlgbox->ShowModal();
 		dlgbox->Destroy();
-		}else{wxMessageBox(wxString::Format("%d:%d",adrx,adry));}
+		}
+		//Mercado
+		if((adrx>=665 && adrx<=732) && adry<=358){
+		Mercado* merdlg;
+		merdlg=new Mercado();
+		merdlg->ShowModal();
+		merdlg->Destroy();
+		}
 		//Estacion de Tren
 		break;
 		case WXK_ESCAPE:
@@ -1182,7 +1190,8 @@ void MyFrame::NewGame(wxCommandEvent& event)
 }
 void MyFrame::CheckearMods(wxCommandEvent& event)
 {
-	ModLoader* modsystem;
+	/*ModLoader* modsystem;
 	modsystem=new ModLoader();
-	modsystem->CheckMod();
+	modsystem->CheckMod();*/
+	wxMessageBox("No hay mods instalados");
 }

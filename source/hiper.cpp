@@ -3,7 +3,6 @@
 #include <wx/mediactrl.h>
 extern int socio, money, electro, food, textil, droga, blacklist, rich;
 int estadoHiper=0;
-	int precioproc[4];
 	static int precioshiper[4]={100,200,300,50};
 
 Hiper::Hiper() : wxDialog(NULL, wxID_ANY, wxT("Cadena Inc."), wxPoint(-1,-1), wxSize(400,400))
