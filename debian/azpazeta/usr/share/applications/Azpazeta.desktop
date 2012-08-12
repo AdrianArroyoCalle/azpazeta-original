@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Azpazeta
+Comment=Azpazeta, the economic and strategy game.
+Comment[es]=Azpazeta, el juego económico y estratégico.
+Exec="/opt/extras.ubuntu.com/azpazeta/Azpazeta" %f
+Terminal=false
+Type=Application
+Icon=Icono64.png
+Categories=GTK;KDE;Games;
+MimeType=application/x-azpazeta-savefile
+Name[es_ES]=Azpazeta
+GenericName=Economic and strategy game
+GenericName[es_ES]=Juego de estrategia y economía
+

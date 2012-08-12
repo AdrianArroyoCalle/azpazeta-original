@@ -18,6 +18,17 @@ extern int money, level, city, mision, aux, droga, blacklist, sobornos, socio, e
 typedef struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;int socio;int electro;int food;int textil;int rich;} AZPServerData;
 typedef struct MyEstado{bool bien;int moneyotro;} MyEstado;
 #include "inicio.hpp"
+
+
+
+#define ARRIBA 1
+#define ABAJO 2
+#define DERECHA 3
+#define IZQUIERDA 4
+#define GOLEFT adrx-=5;RenderLeft(dc);
+#define GORIGHT adrx+=5;RenderRight(dc);
+#define GOUP adry-=5;RenderUp(dc);
+#define GODOWN adry+=5;RenderDown(dc);
 // ----------------------------------------------------------------------------
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
@@ -68,7 +79,7 @@ bool MyApp::OnInit()
           wxSIMPLE_BORDER|wxSTAY_ON_TOP);
   	}
   	wxYield();
-	ChrTaskBarIcon* icon = new ChrTaskBarIcon(); 
+	//ChrTaskBarIcon* icon = new ChrTaskBarIcon(); 
     // call the base class initialization method, currently it only parses a
     // few common command-line options but it could be do more in the future
     if ( !wxApp::OnInit() )
@@ -85,11 +96,14 @@ bool MyApp::OnInit()
 	MyFrame *frame = new MyFrame("Azpazeta");
 	frame->Show(true);
 	frame->Load();
+	frame->Paint();
 	//if(city==4){MyFrame::Stage4();}
 	
         
         }else{	MyFrame *frame = new MyFrame("Azpazeta");
-	frame->Show(true);}
+	frame->Show(true);
+	frame->OnJugar();
+	frame->Paint();}
         
         
     // create the main application window
@@ -126,14 +140,14 @@ MyFrame::MyFrame(const wxString& title)
 	fclose(PointMash);
 	}else{wxMessageBox(wxT("No se ha encontrado archivo de resolución PointMash en: /usr/share/Azpazeta/Res.cfg"),wxT("Error 201"),wxICON_ERROR|wxOK);SetSize(800,600); x=800; y=600;}*/
 	SetSize(800, 600); x=800; y=600;
-	panel = new wxPanel(this);
+	dcpanel=new wxPanel(this,-1,-1,800,600);
 	wxInitAllImageHandlers();
 	/*wxImage portada("/usr/share/Azpazeta/media/Portada.png", wxBITMAP_TYPE_PNG);
 	wxImage portadaSize;
 	portadaSize=portada.Scale(x/2,y/2);
 	portadaSize.SaveFile("/usr/share/Azpazeta/media/newres/Portada.png",wxBITMAP_TYPE_PNG);
 	wxBitmap portadaBMP("/usr/share/Azpazeta/media/newres/Portada.png", wxBITMAP_TYPE_PNG);*/
-	wxBitmap portadaBMP("/opt/extras.ubuntu.com/azpazeta/media/inicio.png", wxBITMAP_TYPE_PNG);
+	/*wxBitmap portadaBMP("/opt/extras.ubuntu.com/azpazeta/media/inicio.png", wxBITMAP_TYPE_PNG);
 	Portada = new wxStaticBitmap(panel, ID_DIBUJO, portadaBMP, wxPoint(-1,-1));
 	if(fachada!=1){
 	actualizar=new wxButton(panel, ID_ACTUALIZAR, wxT("Actualizar juego"), wxPoint(100,500));
@@ -142,7 +156,9 @@ MyFrame::MyFrame(const wxString& title)
 
 	Connect(ID_JUGAR, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnJugar));
 	Connect(ID_USER, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnInstrucciones));
-	Connect(ID_ACTUALIZAR, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnActualizar));
+	Connect(ID_ACTUALIZAR, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler(MyFrame::OnActualizar));*/
+	//dcpanel->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyFrame::OnTecla),NULL, this);
+	//dcpanel->Connect(wxEVT_CHAR, wxKeyEventHandler(MyFrame::OnTecla),NULL, this);
 
 #if wxUSE_MENUS
     // create a menu bar
@@ -219,13 +235,11 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnNet(wxCommandEvent& WXUNUSED(event))
 {
 	//DEBUG MODE
-
+	wxShell("firefox http://sites.google.com/site/divelstore");
 }
 void MyFrame::OnActualizar(wxCommandEvent& WXUNUSED(event))
 {
-	#ifdef LINUX
 	wxShell("update-manager -d");//Solo Ubuntu
-	#endif
 	/*
 	AZPUpdater* azpupdater;
 	azpupdater=new AZPUpdater();
@@ -233,18 +247,19 @@ void MyFrame::OnActualizar(wxCommandEvent& WXUNUSED(event))
 }
 void MyFrame::OnInstrucciones(wxCommandEvent& WXUNUSED(event))
 {
-		//meter un pdf
+		wxShell("firefox http://sites.google.com/site/divelmedia");	//meter un pdf
 }
-void MyFrame::OnJugar(wxCommandEvent& WXUNUSED(event))
+void MyFrame::OnJugar()
 {
+SetMenuBar(menuBar);
 	srand(time(NULL));
 	int tip=rand()%5+1;
 	switch(tip){
-	case 1: wxMessageBox("Do you know that you can press ALT and access to the menus?","Today's tip", wxICON_INFORMATION|wxOK);break;
-	case 2: wxMessageBox("Do you know that you can access to a Azpazeta Server and play with one friend?","Today's tip", wxICON_INFORMATION|wxOK);break;
-	case 3: wxMessageBox("Do you know that you can execute AZPServer and you have a Azpazeta Server?","Today's tip", wxICON_INFORMATION|wxOK);break;
-	case 4: wxMessageBox("Do you know that you can play also in Windows","Today's tip", wxICON_INFORMATION|wxOK);break;
-	case 5: wxMessageBox("Do you know that you can colaborate in launchpad.net/azpazeta","Today's tip", wxICON_INFORMATION|wxOK);break;
+case 1: wxMessageBox(/*"Do you know that you can press ALT and access to the menus?"*/"Sabes que puedes acceder a los menus presionando ALT?","Today's tip", wxICON_INFORMATION|wxOK);break;
+	case 2: wxMessageBox(/*"Do you know that you can access to a Azpazeta Server and play with one friend?"*/"Sabes que puedes acceder a un server de Azpazeta y jugar con un amigo?","Today's tip", wxICON_INFORMATION|wxOK);break;
+	case 3: wxMessageBox(/*"Do you know that you can execute AZPServer and you have a Azpazeta Server?"*/"Sabes que si ejecutas AZPServer.exe, tienes un server de Azpazeta?","Today's tip", wxICON_INFORMATION|wxOK);break;
+	case 4: wxMessageBox(/*"Do you know that you can play also in Windows"*/"Sabes que puedes jugar tambien en Linux?","Today's tip", wxICON_INFORMATION|wxOK);break;
+	case 5: wxMessageBox(/*"Do you know that you can colaborate in launchpad.net/azpazeta"*/"Sabes que puedes colaborar en launchpad.net/azpazeta","Today's tip", wxICON_INFORMATION|wxOK);break;
 	}
 	//wxSound("/usr/share/Azpazeta/audio/Hip-hop.wav").Play(wxSOUND_ASYNC|wxSOUND_LOOP);
 	/*FILE* partida;
@@ -264,18 +279,12 @@ void MyFrame::OnJugar(wxCommandEvent& WXUNUSED(event))
 	SaveDialog* extrasavedlg=new SaveDialog();
         extrasavedlg->Cargar(pathguardar);
         extrasavedlg->Destroy();
-	actualizar->Destroy();
-	jugar->Destroy();
-	instrucciones->Destroy();
 	Load();
 	}else if(city!=0){	
 	}else{
 	wxMessageBox(wxT("Empezando nueva partida"), wxT("Azpazeta"),wxICON_INFORMATION|wxOK);
 	newname=wxGetTextFromUser(wxT("Introduce tu nombre para la partida"),wxT("Azpazeta"),wxT(""));
 	city=1;
-	actualizar->Destroy();
-	jugar->Destroy();
-	instrucciones->Destroy();
 	MyFrame::Stage1();
 	}
 }
@@ -283,71 +292,72 @@ void MyFrame::OnJugar(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnTecla(wxKeyEvent& event)
 {
  int ascii = event.GetKeyCode();
-	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	/*wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	wxBitmap adrixup("/opt/extras.ubuntu.com/azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
 	wxBitmap adrixleft("/opt/extras.ubuntu.com/azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixright("/opt/extras.ubuntu.com/azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);
+	wxBitmap adrixright("/opt/extras.ubuntu.com/azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);*/
+wxClientDC dc(dcpanel);
 switch(city){
-	case 1:
+	case 1:{
 	switch(ascii)
 	{	
 	//El primer edificio está a 26 pix-------333pix y 27 piy--------------330 piy
-		case WXK_LEFT:
+		
+		case WXK_LEFT: //Left
 		if(adry< 390 && adrx<330){}else{
-		adrx--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry));
-		wxPrintf("X= %d, Y= %d", adrx, adry);
-		if(adrx==1 && mision>=6){Stage2();}
+		adrx-=5;
+		RenderLeft(dc);
+		if(adrx<=1 && mision>=6){Stage2();}
 		}
 		break;
-		case WXK_UP:
+		case WXK_UP: //UP
 		if(adry< 390 && adrx<330){}else{
-		adry--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry));}
+		adry-=5;
+		RenderUp(dc);}
 		break;
-		case WXK_RIGHT:
+		case WXK_RIGHT: //Right
 		//if(){}else{
-		adrx++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx,adry));//}
+		adrx+=5;
+		RenderRight(dc);
 		break;
-		case WXK_DOWN:
+		case WXK_DOWN: //Down
 		//if(/*adry< 330 && adrx<334*/){}else{
-		adry++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx,adry));//}
+		adry+=5;
+		RenderDown(dc);
 		break;
 		case WXK_RETURN:
 		if(adry<=400 && adrx<180)
 		{if(adrx>=140){
 		switch(mision){
 		case 0:{
-		wxBitmap bocadillo("/opt/extras.ubuntu.com/azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
-		Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
-		cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT("Quien eres?\nNo te conozco.\nEres el nuevo?\nPresiona ENTER"), wxPoint(625, 470));
+		RenderUp(dc);
+		dc.DrawText("Quien eres?\nNo te conozco.\nEres el nuevo?\nPresiona ENTER", wxPoint(625, 470));
 		mision++;
 		break;}
 		case 1:
-		cap1mis1->SetLabel(wxT("Bueno, me presento\nSoy Alfredo\nEl alcalde de Azpazeta\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("Bueno, me presento\nSoy Alfredo\nEl alcalde de Azpazeta\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 2:{
+		RenderUp(dc);
 		wxString completo=wxT("Como te llamas?\n")+newname+wxT("\nBonito nombre\nPresiona ENTER");
-		cap1mis1->SetLabel(completo);
+		dc.DrawText(completo,wxPoint(625,470));
 		mision++;
 		break;}
 		case 3:
-		cap1mis1->SetLabel(wxT("Te has perdido?\nSupongo que querras casa\nPero no va ser gratis\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("Te has perdido?\nSupongo que querras casa\nPero no va ser gratis\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 4:
-		cap1mis1->SetLabel(wxT("Necesitaras un trabajo\nNo se de que\nEso lo dejo a tu eleccion\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("Necesitaras un trabajo\nNo se de que\nEso lo dejo a tu eleccion\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 5:
-		cap1mis1->SetLabel(wxT("[Objetivo anadido:\nEncontrar trabajo]\nPista: El pueblo esta a la izquierda"));
+		RenderUp(dc);
+		dc.DrawText("[Objetivo anadido:\nEncontrar trabajo]\nPista: El pueblo esta a la izquierda",wxPoint(625,470));
 		mision++;
 		break;
 		}}}
@@ -365,90 +375,98 @@ switch(city){
 		case WXK_ALT:
 		SetMenuBar(menuBar);
 		break;
-		}break;
+	}break;}
 	case 2:
 	switch(ascii)
 	{	
 	//El primer edificio está a 26 pix-------333pix y 27 piy--------------330 piy
 		case WXK_LEFT:
 		if(adry< 470){}else{
-		adrx--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry));
-		if(adrx==1 && mision==15){Adrix->Destroy();Stage3();}
+		adrx-=5;
+		RenderLeft(dc);
+		if(adrx<=1 && mision==15){Stage3();}
 		}
 		break;
 		case WXK_UP:
 		if(adry< 470){}else{
-		adry--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry));}
+		adry-=5;
+		RenderUp(dc);}
 		break;
 		case WXK_RIGHT:
 		//if(){}else{
-		adrx++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx,adry));//}
+		adrx+=5;
+		RenderRight(dc);//}
 		break;
 		case WXK_DOWN:
 		//if(/*adry< 330 && adrx<334*/){}else{
-		adry++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx,adry));//}
+		adry+=5;
+		RenderDown(dc);
+		//}
 		break;
 		case WXK_RETURN:
 		if(adry<=480)
 		{if(adrx>=108 && adrx<=170){
 		switch(mision){
 		case 6:
-		cap1mis1->SetLabel(wxT("\"El INEM\nSeguro que aqui habra trabajo\nVoy a ver\"\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("\"El INEM\nSeguro que aqui habra trabajo\nVoy a ver\"\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 7:
-		cap1mis1->SetLabel(wxT("Siguiente...\n-Venia a por trabajo\n-Tenemos en la panificadora\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("Siguiente...\n-Venia a por trabajo\n-Tenemos en la panificadora\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 8:
-		cap1mis1->SetLabel(wxT("-Creo que me valdra\n-Siguiente...\n\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("-Creo que me valdra\n-Siguiente...\n\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 9:
-		cap1mis1->SetLabel(wxT("[Objetivo anadido:\nIr a la panificadora]"));
+		RenderUp(dc);
+		dc.DrawText("[Objetivo anadido:\nIr a la panificadora]",wxPoint(625,470));
 		mision++;
 		break;
 		default:
-		cap1mis1->SetLabel(wxT("Otra vez tu\nAnda vete para fuera\n"));
+		RenderUp(dc);
+		dc.DrawText("Otra vez tu\nAnda vete para fuera\n",wxPoint(625,470));
 		}}
 		if(adrx>=474 && adrx<=542){
 		switch(mision){
 		case 10:
-		cap1mis1->SetLabel(wxT("(Ruidos)\nPUES SI, IMPORTA\nAnda, vete a...\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("(Ruidos)\nPUES SI, IMPORTA\nAnda, vete a...\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 11:
-		cap1mis1->SetLabel(wxT("-Y tu quien eres?\n-Vengo por el puesto\n-Ah, sí.\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("-Y tu quien eres?\n-Vengo por el puesto\n-Ah, sí.\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 12:
-		cap1mis1->SetLabel(wxT("Trabajaras de comerciante\nambulante.\nIras por los pueblos\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("Trabajaras de comerciante\nambulante.\nIras por los pueblos\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 13:
-		cap1mis1->SetLabel(wxT("Vamos a ver como lo haces\nVe a la plaza de Gorguez\nLleva estos panes\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("Vamos a ver como lo haces\nVe a la plaza de Gorguez\nLleva estos panes\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		case 14:
-		cap1mis1->SetLabel(wxT("[Objetivo anadido:\nVender los panes en Gorguez]\nPista: La estacion de tren\ntiene trenes locales"));
+		RenderUp(dc);
+		dc.DrawText("[Objetivo anadido:\nVender los panes en Gorguez]\nPista: La estacion de tren\ntiene trenes locales",wxPoint(625,470));
 		mision++;
 		break; 
 		default:
-		cap1mis1->SetLabel(wxT("(Esta cerrado)"));
+		RenderUp(dc);
+		dc.DrawText("(Esta cerrado)",wxPoint(625,470));
 		break;
 		}}}
 
 		break;
 		case WXK_ESCAPE:
-		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		SetMenuBar(menuBar);
@@ -466,40 +484,33 @@ switch(city){
 	{	
 	//El primer edificio está a 26 pix-------333pix y 27 piy--------------330 piy
 		case WXK_LEFT:
-		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){if(adrx==504){adrx--; Adrix->Destroy();Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry)); }}else{
-		if(adrx<=1){Adrix->Destroy();Stage4();}else{
-		adrx--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry));}
+		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){if(adrx==504){adrx--; RenderLeft(dc); }}else{
+		if(adrx<=1){Stage4();}else{
+		GOLEFT}
 		//if(adrx==1 && mision>=6){Stage2();}
 		}
 		break;
 		case WXK_UP:
-		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){printf("Valor X=%d Y=%d",adrx, adry);if(adry==199){adry--; Adrix->Destroy();Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry)); }}else{
-		if(adry<=5){Adrix->Destroy();Stage7();}
-		adry--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry));}
+		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){printf("Valor X=%d Y=%d",adrx, adry);if(adry==199){adry--; RenderUp(dc);}}else{
+		if(adry<=5){Stage7();}
+GOUP}
 		break;
 		case WXK_RIGHT:
-		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){if(adrx==306){adrx++; Adrix->Destroy();Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx,adry)); }}else{
-		if(adrx>=746){Adrix->Destroy();Stage2();}
-		adrx++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx,adry));}
+		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){if(adrx==306){adrx++; RenderRight(dc); }}else{
+		if(adrx>=746){Stage2();}
+GORIGHT}
 		break;
 		case WXK_DOWN:
-		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){if(adry==382 || adry==155){adry++; Adrix->Destroy();Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx,adry)); }}else{
-		adry++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx,adry));}
+		if((adry<156 && adrx<307) || ((adry<383 && adry>200) && adrx<307) || (adry<383 && adrx>503)){if(adry==382 || adry==155){adry++; RenderDown(dc);}}else{
+GODOWN}
 		break;
 		case WXK_RETURN:
                 //Trenes
 		if(adry<=427 && (adrx>=633 && adrx<=670)){
 		switch(mision){
 		case 15:
-		cap1mis1->SetLabel(wxT("-Supongo que es la estacion\nVamos a ver como es\nGorguez\nPresiona ENTER"));
+		RenderUp(dc);
+		dc.DrawText("-Supongo que es la estacion\nVamos a ver como es\nGorguez\nPresiona ENTER",wxPoint(625,470));
 		mision++;
 		break;
 		default:
@@ -508,7 +519,6 @@ switch(city){
 		wxPrintf("Mostrando...");
 		trendlg->ShowModal();
 		trendlg->Destroy();
-		Adrix->Destroy();
 		Load();
 		break;
 		}}
@@ -518,12 +528,11 @@ switch(city){
                 savedlg=new SaveDialog();
                 savedlg->ShowModal();
                 savedlg->Destroy();
-		Adrix->Destroy();
 		Load();
                 }
 		break;
 		case WXK_ESCAPE:
-		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		wxMessageBox(wxT("TAB"));
@@ -540,29 +549,21 @@ switch(city){
 	//366-222
 		case WXK_LEFT:
 			if(adrx<=283){}else{
-			adrx--;
-			Adrix->Destroy();
-			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx, adry));}
+			GOLEFT}
 		break;
 		case WXK_UP:
 			if(adry<=204 && adrx>=474){}else{
-			if(adry<=10){Adrix->Destroy();Stage5();}
-			adry--;
-			Adrix->Destroy();
-			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry));}
+			if(adry<=10){Stage5();}
+GOUP}
 		break;
 		case WXK_RIGHT:
 			if((adry<=204 && adrx>=475) || (adry>=366 && adrx>=474)){}else{
-			if(adrx>=746){Adrix->Destroy();Stage3();}
-			adrx++;
-			Adrix->Destroy();
-			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));}
+			if(adrx>=746){Stage3();}
+	GORIGHT}
 		break;
 		case WXK_DOWN:
 			if(adry>=366 && adrx>=474){}else{
-			adry++;
-			Adrix->Destroy();
-			Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));}
+			GODOWN}
 		break;
 		case WXK_RETURN:
 		if((adrx>=616 || adrx<=688) && adry>=360){
@@ -571,7 +572,7 @@ switch(city){
 		keydlg->Destroy();}
 		break;
 		case WXK_ESCAPE:
-		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		
@@ -589,33 +590,25 @@ switch(city){
 	//366-222
 		case WXK_LEFT:
 		if(adrx<=362 && (adry<=226 || adry>=399)){}else{
-		adrx--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx, adry));
+		GOLEFT
 
 		}
 		break;
 		case WXK_UP:
 		if(adrx<=362 && adry<=226){}else{
-		if(adry<=5){Adrix->Destroy(); Stage6();}
-		adry--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx, adry));
+		if(adry<=5){Stage6();}
+		GOUP
 		}		//226-362
 		break;
 		case WXK_RIGHT:
 		if(adrx>=545){}else{
-		adrx++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));
+		GORIGHT
 		}
 		break;
 		case WXK_DOWN:
 		if(adrx<=362 && adry>=399){}else{
-		if(adry>=540){Adrix->Destroy();Stage4();}
-		adry++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+		if(adry>=540){Stage4();}
+		GODOWN
 		}//399-362
 		break;
 		case WXK_RETURN:
@@ -628,7 +621,7 @@ switch(city){
 			}
 		break;
 		case WXK_ESCAPE:
-		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		
@@ -645,34 +638,26 @@ switch(city){
 	{	
 	//366-222
 		case WXK_LEFT:
-		adrx--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx, adry));
+		GOLEFT
 		break;
 		case WXK_UP:
 		if(adry<=300){}else{
-		adry--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx, adry));
+		GOUP
 		}
 		break;
 		case WXK_RIGHT:
-		adrx++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));
+		GORIGHT
 		break;
 		case WXK_DOWN:
-		if(adry>=540){Adrix->Destroy(); Stage5();}
-		adry++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+		if(adry>=540){ Stage5();}
+		GODOWN
 		break;
 		case WXK_RETURN:
 		//Entrar en Hipermercado
 		if(adry<=320 && (adrx>=407 && adrx<=470)){Hiper* hiperdlg; hiperdlg=new Hiper(); hiperdlg->ShowModal();hiperdlg->Destroy();}
 		break;
 		case WXK_ESCAPE:
-		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		
@@ -689,33 +674,25 @@ switch(city){
 	{	
 	//366-222
 		case WXK_LEFT:
-		adrx--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx, adry));
+		GOLEFT
 		break;
 		case WXK_UP:
 		if(adry<=300){}else{
-		adry--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx,adry));
+		GOUP
 		}
 		break;
 		case WXK_RIGHT:
-		adrx++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));
+		GORIGHT
 		break;
 		case WXK_DOWN:
-		if(adry>=540){Adrix->Destroy();Stage3();}
-		adry++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+		if(adry>=540){Stage3();}
+		GODOWN
 		break;
 		case WXK_RETURN:
 		if(adry<=302 && (adrx>=382 && adrx<=440)){Golf* golfdlg; golfdlg=new Golf();golfdlg->ShowModal();golfdlg->Destroy();}
 		break;
 		case WXK_ESCAPE:
-		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		
@@ -733,30 +710,22 @@ switch(city){
 	//366-222
 		case WXK_LEFT:
 		if((adrx<=405 && adry>=405) || (adrx<=150 && adry<=130)){}else{
-		adrx--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixleft, wxPoint(adrx,adry));
+		GOLEFT
 		}
 		break;
 		case WXK_UP:
 		if((adrx<=150 && adry<=130) || (adrx>=555 && adry<=340)){}else{
-		adry--;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixup, wxPoint(adrx, adry));
+		GOUP
 		}
 		break;
 		case WXK_RIGHT:
 		if(adrx>=555 && (adry<=340 || adry>=505)){}else{
-		adrx++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixright, wxPoint(adrx, adry));
+		GORIGHT
 		}
 		break;
 		case WXK_DOWN:
 		if((adrx<=405 && adry>=405) || (adrx>=555 && adry>=505)){}else{
-		adry++;
-		Adrix->Destroy();
-		Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+		GODOWN
 		}
 		break;
 		case WXK_RETURN:
@@ -785,7 +754,7 @@ switch(city){
 		}
 		break;
 		case WXK_ESCAPE:
-		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
+		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Load();}
 		break;
 		case WXK_TAB:
 		
@@ -803,93 +772,75 @@ switch(city){
 
 void MyFrame::Stage1()
 {	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
-	/*wxBitmap adrixup("/usr/share/Azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixleft("/usr/share/Azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixright("/usr/share/Azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);*/
 	wxBitmap cap1dib1("/opt/extras.ubuntu.com/azpazeta/media/1x1.png", wxBITMAP_TYPE_PNG);
-	Portada->SetBitmap(cap1dib1);
-	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(x/2,y/2));
-	actualizar->Destroy();
-	jugar->Destroy();
-	instrucciones->Destroy();
+	wxClientDC maindc(dcpanel);
+	maindc.DrawBitmap(cap1dib1,wxPoint(-1,-1),true);
+	maindc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true);
+	city=1;
 	wxPrintf("Bienvenido a Azpazeta!\nAutor: Adrian Arroyo Calle\nAno: 2012\nJuego certficado por: Divel Games\n");
-
 }
 
 void MyFrame::Stage2()
 {
 	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
-	/*wxBitmap adrixup("/usr/share/Azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixleft("/usr/share/Azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixright("/usr/share/Azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);*/
 	wxBitmap inem("/opt/extras.ubuntu.com/azpazeta/media/INEM.png", wxBITMAP_TYPE_PNG);
-	Portada->SetBitmap(inem);
-	adrx=500;
-	adry=500;
-	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx,adry));
+	wxClientDC maindc(dcpanel);
+	maindc.DrawBitmap(inem,wxPoint(-1,-1),true);
+	maindc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true);
 	city=2;
 }
 void MyFrame::Stage3()
 {
-		wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
-	/*wxBitmap adrixup("/usr/share/Azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixleft("/usr/share/Azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
-	wxBitmap adrixright("/usr/share/Azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);*/
+	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	wxBitmap centro1("/opt/extras.ubuntu.com/azpazeta/media/Centro1.png", wxBITMAP_TYPE_PNG);
-	Portada->SetBitmap(centro1);
-	adrx=500;
-	adry=500;
-	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	wxClientDC maindc(dcpanel);
+	maindc.DrawBitmap(centro1,wxPoint(-1,-1),true);
+	maindc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true);
 	city=3;
 }
 void MyFrame::Stage4()
 {
 	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	wxBitmap centro2("/opt/extras.ubuntu.com/azpazeta/media/Centro2.png",wxBITMAP_TYPE_PNG);
-	Portada->SetBitmap(centro2);
-	adrx=300;
-	adry=300;
-	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	wxClientDC maindc(dcpanel);
+	maindc.DrawBitmap(centro2,wxPoint(-1,-1),true);
+	maindc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true);
 	city=4;
 }
 void MyFrame::Stage5()
 {
 	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	wxBitmap centro3("/opt/extras.ubuntu.com/azpazeta/media/Centro3.png", wxBITMAP_TYPE_PNG);
-	Portada->SetBitmap(centro3);
-	adrx=400;
-	adry=400;
-	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	wxClientDC maindc(dcpanel);
+	maindc.DrawBitmap(centro3,wxPoint(-1,-1),true);
+	maindc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true);
 	city=5;
 }
 void MyFrame::Stage6()
 {
 		wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	wxBitmap hiper("/opt/extras.ubuntu.com/azpazeta/media/Hiper.png", wxBITMAP_TYPE_PNG);
-	Portada->SetBitmap(hiper);
-	adrx=300;
-	adry=300;
-	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	wxClientDC maindc(dcpanel);
+	maindc.DrawBitmap(hiper,wxPoint(-1,-1),true);
+	maindc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true);
 	city=6;
 }
 void MyFrame::Stage7()
 {
 	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	wxBitmap golf("/opt/extras.ubuntu.com/azpazeta/media/Golf.png", wxBITMAP_TYPE_PNG);
-	Portada->SetBitmap(golf);
-	adrx=300;
-	adry=300;
-	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	wxClientDC maindc(dcpanel);
+	maindc.DrawBitmap(golf,wxPoint(-1,-1),true);
+	maindc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true);
 	city=7;
 }
 void MyFrame::Stage11()
 {
 	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
 	wxBitmap gorguez("/opt/extras.ubuntu.com/azpazeta/media/Gorguez.png", wxBITMAP_TYPE_PNG);
-	Portada->SetBitmap(gorguez);
-	adrx=300;
-	adry=300;
-	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
+	wxClientDC maindc(dcpanel);
+	maindc.DrawBitmap(gorguez,wxPoint(-1,-1),true);
+	maindc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true);
 	city=11;
 }
 void MyFrame::Stage12()
@@ -907,13 +858,9 @@ void MyFrame::Stage12()
 }
 void MyFrame::Load()
 {
-	wxBitmap bocadillo("/opt/extras.ubuntu.com/azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
-	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
-	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
 	/*actualizar->Destroy();
 	jugar->Destroy();
 	instrucciones->Destroy();*/
-	#ifdef LINUX
 	NotifyNotification *n;
     	notify_init("Azpazeta");
     	n = notify_notification_new ("Azpazeta", "Se ha cargado correctamente la partida", NULL);
@@ -921,7 +868,6 @@ void MyFrame::Load()
 	if (!notify_notification_show (n, NULL)) {
         wxPrintf("Error al enviar notificación.\n");        
     	}
-	#endif
 	switch(city){
 	case 1: Stage1(); break;
 	case 2: Stage2(); break;
@@ -963,6 +909,7 @@ bool MyApp::OnCmdLineParsed(wxCmdLineParser& parser)
 
 void MyFrame::AZPCliente(wxCommandEvent& event)
 {
+	wxMessageBox("Modo experimental\nSe recomienda no usar hasta otras actualizaciones","Divel Network",wxICON_WARNING|wxOK);
 	int siono=wxMessageBox("Quieres utilizar IPv6?\nSi no se usara IPv4","Divel Network",wxICON_QUESTION|wxYES_NO);
 
 	if(siono==wxNO){
@@ -1197,14 +1144,8 @@ void MyFrame::NewGame(wxCommandEvent& event)
 {
 	wxMessageBox(wxT("Empezando nueva partida"), wxT("Azpazeta"),wxICON_INFORMATION|wxOK);
 	newname=wxGetTextFromUser(wxT("Introduce tu nombre para la partida"),wxT("Azpazeta"),wxT(""));
-	wxBitmap bocadillo("/opt/extras.ubuntu.com/azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
-	Bocadillo=new wxStaticBitmap(panel, ID_DIBUJO, bocadillo, wxPoint(600,450));
-	cap1mis1=new wxStaticText(panel, ID_DIBUJO, wxT(CAP1MIS1TEX1), wxPoint(625, 470));
-	actualizar=new wxButton(panel, wxID_ANY, "...");
-	jugar=new wxButton(panel, wxID_ANY, "...");
-	instrucciones=new wxButton(panel, wxID_ANY, "...");
+
 	city=1;
-	Adrix->Destroy();
 	money=2000;
 	mision=0;
 	level=0;
@@ -1216,4 +1157,145 @@ void MyFrame::CheckearMods(wxCommandEvent& event)
 	modsystem=new ModLoader();
 	modsystem->CheckMod();*/
 	wxMessageBox("No hay mods instalados");
+}
+void MyFrame::Paint()
+{
+	wxClientDC dc(dcpanel);
+    RenderDown(dc);
+}
+void MyFrame::RenderDown(wxDC& dc)
+{
+	wxBitmap adrixdown("/opt/extras.ubuntu.com/azpazeta/media/Adrix.png", wxBITMAP_TYPE_PNG);
+	dc.DrawText("No se ha renderizado bien",wxPoint(-1,-1));
+	//Dibujar fondo
+	switch(city){
+	case 0:{dc.DrawBitmap(adrixdown, wxPoint(adrx,adry),true);}
+	case 1:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 2:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/INEM.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 3:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 4:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro2.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 5:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro3.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 6:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Hiper.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 7:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Golf.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 8:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 9:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+
+	case 10:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 11:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Gorguez.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	}
+	
+}
+void MyFrame::RenderUp(wxDC& dc)
+{
+#define adrixdown adrixup
+	wxBitmap adrixup("/opt/extras.ubuntu.com/azpazeta/media/AdrixUp.png", wxBITMAP_TYPE_PNG);
+	dc.DrawText("No se ha renderizado bien",wxPoint(-1,-1));
+	//Dibujar fondo
+	switch(city){
+	case 0:{dc.DrawBitmap(adrixdown, wxPoint(adrx,adry),true);}
+	case 1:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 2:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/INEM.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 3:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 4:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro2.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 5:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro3.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 6:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Hiper.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 7:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Golf.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 8:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 9:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+
+	case 10:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 11:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Gorguez.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	}
+	
+}
+void MyFrame::RenderLeft(wxDC& dc)
+{
+	wxBitmap adrixleft("/opt/extras.ubuntu.com/azpazeta/media/AdrixLeft.png", wxBITMAP_TYPE_PNG);
+	dc.DrawText("No se ha renderizado bien",wxPoint(-1,-1));
+#define adrixdown adrixleft
+	//Dibujar fondo
+	switch(city){
+	case 0:{dc.DrawBitmap(adrixdown, wxPoint(adrx,adry),true);}
+	case 1:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 2:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/INEM.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 3:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 4:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro2.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 5:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro3.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 6:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Hiper.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 7:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Golf.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 8:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 9:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+
+	case 10:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 11:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Gorguez.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	}
+	
+}
+void MyFrame::RenderRight(wxDC& dc)
+{
+
+	wxBitmap adrixright("/opt/extras.ubuntu.com/azpazeta/media/AdrixRight.png", wxBITMAP_TYPE_PNG);
+#define adrixdown adrixright
+	dc.DrawText("No se ha renderizado bien",wxPoint(-1,-1));
+	//Dibujar fondo
+	switch(city){
+	case 0:{dc.DrawBitmap(adrixdown, wxPoint(adrx,adry),true);}
+	case 1:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 2:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/INEM.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 3:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 4:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro2.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 5:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Centro3.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 6:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Hiper.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 7:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Golf.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 8:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 9:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+
+	case 10:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/1x1.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	case 11:{ wxBitmap general("/opt/extras.ubuntu.com/azpazeta/media/Gorguez.png",wxBITMAP_TYPE_PNG);
+		dc.DrawBitmap(general,wxPoint(-1,-1),true); dc.DrawBitmap(adrixdown,wxPoint(adrx,adry),true); break;}
+	}
+	
 }

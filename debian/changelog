@@ -1,7 +1,7 @@
-azpazeta (1.0.0.1) precise; urgency=low
+azpazeta (1.0.0.2) precise; urgency=low
 
-  * Primera version
-  * Formato de archivos original
+  * Errores de Render
+  * Formato de archivos en ZIP
   * Dependencias actualizadas
 
- -- Adrian Arroyo Calle (Divel) <adrian.arroyocalle@gmail.com>  Thu, 07 Jun 2012 17:04:19 +1200
+ -- Adrian Arroyo Calle (Divel) <adrian.arroyocalle@gmail.com>  Wed, 09 Sep 2012 17:04:19 +1200

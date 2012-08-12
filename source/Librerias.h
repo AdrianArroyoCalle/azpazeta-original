@@ -123,7 +123,7 @@ public:
 	void OnNet(wxCommandEvent& event);
 	void OnInstrucciones(wxCommandEvent& event);
 	void OnActualizar(wxCommandEvent& event);
-	void OnJugar(wxCommandEvent& event);
+	void OnJugar();
 	void OnBorrar(wxCommandEvent& event);
 	void OnTaskKiller(wxCommandEvent& event);
 	void OnCorreos(wxCommandEvent& event);
@@ -145,6 +145,11 @@ public:
 	void NewGame(wxCommandEvent& event);
 	int Lee_Socket (int fd, char *Datos, int Longitud);
 	int Escribe_Socket (int fd, char *Datos, int Longitud);
+	void Paint();
+	void RenderDown(wxDC& dc);
+	void RenderUp(wxDC& dc);
+	void RenderRight(wxDC& dc);
+	void RenderLeft(wxDC& dc);
 	wxImage Play;
 	wxButton* jugar;
 	wxButton* actualizar;
@@ -157,6 +162,7 @@ public:
 	wxMenuBar* menuBar;
 	wxMenu *fileMenu;
         wxMenu *helpMenu;
+	wxPanel* dcpanel;
 	
 private:
     // any class wishing to process wxWidgets events must use this macro
