@@ -1,4 +1,3 @@
-5dae91013da91802ad00461515dac028  opt/extras.ubuntu.com/azpazeta/AZPServer
 ccabf6da24af354b3e6bc681cf9453bd  opt/extras.ubuntu.com/azpazeta/Azpazeta
 ef6638ae83575c38540c5a9603a6ac80  opt/extras.ubuntu.com/azpazeta/media/1x1.png
 868d0f0f401826f7f4f61dfa46de2e5f  opt/extras.ubuntu.com/azpazeta/media/Adrix.png
@@ -28,7 +27,7 @@ fd9f81065c0859f00efccc50a5c69c64  opt/extras.ubuntu.com/azpazeta/media/inicio.pn
 04c741a012d36bbd2c635f00bac4c788  opt/extras.ubuntu.com/azpazeta/media/save.png
 25426ca21a7b5ab84f1117129df2b0a5  opt/extras.ubuntu.com/azpazeta/media/splash.png
 2244df11d6c7ff881ca7ff440cef9747  opt/extras.ubuntu.com/azpazeta/media/tren.png
-f62405409ee47674d74e178fb3114c9c  usr/share/applications/Azpazeta.desktop
-b0c27f6717674dfab0ed1347e603d4d7  usr/share/doc/azpazeta/changelog.gz
+f62405409ee47674d74e178fb3114c9c  usr/share/applications/extras-Azpazeta.desktop
+abb142822367f0e1215742c0eacf9e79  usr/share/doc/azpazeta/changelog.gz
 4825d950e509e87b04d0ff348ec763ff  usr/share/doc/azpazeta/copyright
 bfe36dbbf50ff9bf1f57618b123d88e9  usr/share/pixmaps/Icono64.png

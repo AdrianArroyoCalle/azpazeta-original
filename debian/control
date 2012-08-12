@@ -2,14 +2,14 @@ Source: azpazeta
 Section: games
 Priority: optional
 Maintainer: Adrian Arroyo Calle (Divel) <adrian.arroyocalle@gmail.com>
-Build-Depends: debhelper (>= 7), libstdc++6(>= 4.1), libgtk-3-dev, libgdk-pixbuf2.0-0, libcairo2, libcairomm-1.0-1, libpango1.0-0, libpangomm-1.4-1, libx11-6, libsm6, libpango1.0-dev, libgtk2.0-0, libnotify4, libnotify-bin
+Build-Depends: debhelper (>= 7), libstdc++6(>= 4.1), libgtk-3-dev, libgdk-pixbuf2.0-0, libcairo2, libcairomm-1.0-1, libpango1.0-0, libpangomm-1.4-1, libx11-6, libsm6, libpango1.0-dev, libgtk2.0-0, libnotify4, libnotify-bin, wxwidgets2.9
 Standards-Version: 3.9.2
 Homepage: http://sites.google.com/site/divelmedia
 
 
 Architecture: i386 amd64
 Depends:${shlibs:Depends}
-Version: 1.0.0.2
+Version: 1.0.0.3
 Description: Azpazeta
  The strategy-economics game.
 Package: azpazeta

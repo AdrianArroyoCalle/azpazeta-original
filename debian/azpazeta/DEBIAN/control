@@ -1,8 +1,8 @@
 Package: azpazeta
-Version: 1.0.0.2
+Version: 1.0.0.3
 Architecture: i386
 Maintainer: Adrian Arroyo Calle (Divel) <adrian.arroyocalle@gmail.com>
-Installed-Size: 6676
+Installed-Size: 6670
 Depends: libc6 (>= 2.11), libcairo2 (>= 1.6.0), libgcc1 (>= 1:4.1.1), libgdk-pixbuf2.0-0 (>= 2.22.0), libglib2.0-0 (>= 2.24.0), libgtk2.0-0 (>= 2.24.0), libnotify4 (>= 0.7.0), libpango1.0-0 (>= 1.18.0), libpng12-0 (>= 1.2.13-4), libsm6, libstdc++6 (>= 4.4.0), libx11-6, zlib1g (>= 1:1.1.4)
 Section: games
 Priority: optional
