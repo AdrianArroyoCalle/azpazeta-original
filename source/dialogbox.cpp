@@ -11,6 +11,9 @@ DialogBox::DialogBox()
 : wxDialog(NULL, wxID_ANY, wxT("Bread & Pan"), wxPoint(-1,-1), wxSize(400,400))
 {
 	diagpanel=new wxPanel(this);
+	if(money>=100000){
+	wxMessageBox("Felicidades, has logrado 100.000 $. Has terminado el juego, ahora puedes jugar multijugador, seguir jugando o esperar nuevas actualizaciones (nuevas ciudades, nuevos productos,...)");
+	}else	
 	if(mision==16){
 	line1=new wxStaticText(diagpanel, wxID_ANY, "-Veo que traes los panes, no es cierto", wxPoint(-1,-1));
 

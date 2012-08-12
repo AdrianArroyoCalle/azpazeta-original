@@ -155,12 +155,12 @@ void TrenDialog::OnQuinto(wxCommandEvent& event)
 void TrenDialog::ProcesarViajes(wxString destino, int precio)
 {
 	int realdestino;
-	if(destino=="Gorguez"){city=11;}
-	if(destino=="Centralia"){realdestino=2;}
-	if(destino=="Obscura"){realdestino=3;}
-	if(destino=="Wellville"){realdestino=4;}
-	if(destino=="Orlan\t"){realdestino=5;}
-	money=money-precio;
+	if(destino=="Gorguez"){city=11;money=money-precio;}
+	if(destino=="Centralia"){city=12;money=money-precio;}
+	if(destino=="Obscura"){wxMessageBox("No está disponible el tren");}
+	if(destino=="Wellville"){wxMessageBox("No está disponible el tren");}
+	if(destino=="Orlan\t"){wxMessageBox("No está disponible el tren");}
+	
 	this->Destroy();
 	
 }

@@ -8,6 +8,7 @@
 #include <iostream>
 //#include "libmodloader.h"
 #include <assert.h>
+//#include "gortren.h"
 #include <iostream>
 #include "tren.h"
 #include "VarGlobal.h"
@@ -137,6 +138,7 @@ public:
 	void Stage6();
 	void Stage7();
 	void Stage11();
+	void Stage12();
 	void Load();
 	void CheckearMods(wxCommandEvent& event);
 	void ComprobarMulti(wxTimerEvent& event);

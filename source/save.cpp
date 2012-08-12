@@ -2,7 +2,7 @@
 //#include "inicio.hpp"
 #include "Librerias.h"
 
-extern int money, city, aux, mision, sobornos, blacklist, droga, socio, electro, food, textil;
+extern int money, city, aux, mision, sobornos, blacklist, droga, socio, electro, food, textil,rich,prima;
 extern char name; 
 
 SaveDialog::SaveDialog()
@@ -45,7 +45,7 @@ void SaveDialog::OnBotonGuardarStd(wxCommandEvent& event)
 	wxString sep(wxFileName::GetPathSeparator());
 	char datosparaguardar[2048];
 	zip.PutNextEntry(wxT("AZPGeneral.txt"));
-	sprintf(datosparaguardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",money, city, mision, aux, droga, sobornos, blacklist, socio, electro, food, textil);
+	sprintf(datosparaguardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:RICH=%d:PRIMA=%d:\n",money, city, mision, aux, droga, sobornos, blacklist, socio, electro, food, textil,rich,prima);
 	txt << datosparaguardar;
 	zip.PutNextEntry(wxT("SERVER-DATA")+ sep+ wxT("lastservers.txt"));
 	zip.PutNextEntry(wxT("META-DATA") + sep + wxT("INFO.txt"));
@@ -77,7 +77,7 @@ void SaveDialog::OnBotonCargarStd(wxCommandEvent& event)
       		while (!zip.Eof()) {
          		zip.Read(mybuffer, 2048);
 			if(archivo==1){
-				sscanf(mybuffer,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist, &socio, &electro, &food, &textil);//Los datos importantes de juego están aquí
+				sscanf(mybuffer,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:RICH=%d:PRIMA=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist, &socio, &electro, &food, &textil,&rich,&prima);//Los datos importantes de juego están aquí
 
 			}
 			archivo++;
@@ -114,7 +114,7 @@ void SaveDialog::OnBotonGuardarCopy(wxCommandEvent& event)
 	wxString sep(wxFileName::GetPathSeparator());
 	char datosparaguardar[2048];
 	zip.PutNextEntry(wxT("AZPGeneral.txt"));
-	sprintf(datosparaguardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",money, city, mision, aux, droga, sobornos, blacklist, socio, electro, food, textil);
+	sprintf(datosparaguardar,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:RICH=%d:PRIMA=%d:\n",money, city, mision, aux, droga, sobornos, blacklist, socio, electro, food, textil,rich,prima);
 	txt << datosparaguardar;
 	zip.PutNextEntry(wxT("SERVER-DATA")+ sep+ wxT("lastservers.txt"));
 	zip.PutNextEntry(wxT("META-DATA") + sep + wxT("INFO.txt"));
@@ -140,7 +140,7 @@ void SaveDialog::OnBotonCargarCopy(wxCommandEvent& event)
       		while (!zip.Eof()) {
          		zip.Read(mybuffer, 2048);
 			if(archivo==1){
-				sscanf(mybuffer,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist, &socio, &electro, &food, &textil);//Los datos importantes de juego están aquí
+				sscanf(mybuffer,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:RICH=%d:PRIMA=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist, &socio, &electro, &food, &textil,&rich,&prima);//Los datos importantes de juego están aquí
 
 			}
 			archivo++;
@@ -208,7 +208,7 @@ void SaveDialog::Cargar(wxString archivo)
       		while (!zip.Eof()) {
          		zip.Read(mybuffer, 2048);
 			if(leer==1){
-				sscanf(mybuffer,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist, &socio, &electro, &food, &textil);//Los datos importantes de juego están aquí
+				sscanf(mybuffer,"Azpazeta_Save_File_v.1.0:MONEY=%d:CITY=%d:MISION=%d:AUX=%d:DROGA=%d:SOBORNO=%d:BLACKLIST=%d:SOCIO=%d:ELECTRO=%d:FOOD=%d:TEXTIL=%d:RICH=%d:PRIMA=%d:\n",&money, &city, &mision, &aux, &droga, &sobornos, &blacklist, &socio, &electro, &food, &textil,&rich,&prima);//Los datos importantes de juego están aquí
 
 			}
 			leer++;

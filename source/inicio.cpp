@@ -14,7 +14,7 @@
 static char *Id="$Id$";
 static char *Author="$Author$";
 int AZPServer;
-extern int money, level, city, mision, aux, droga, blacklist, sobornos, socio, electro, food, textil,rich;
+extern int money, level, city, mision, aux, droga, blacklist, sobornos, socio, electro, food, textil,rich, prima;
 typedef struct AZPServerData{int level;int money;int city;char* name;int mision;int aux; int droga;int blacklist;int sobornos;int socio;int electro;int food;int textil;int rich;} AZPServerData;
 typedef struct MyEstado{bool bien;int moneyotro;} MyEstado;
 #include "inicio.hpp"
@@ -775,6 +775,14 @@ switch(city){
 		merdlg->Destroy();
 		}
 		//Estacion de Tren
+		if((adrx>=665 && adrx<=732) && adry>=498){
+		int iraazpazeta=wxMessageBox("Deseas ir a Azpazeta por 50 $?","Train Station",wxYES_NO|wxICON_QUESTION);
+		if(iraazpazeta==wxYES){
+		money-=50;
+		city=3;
+		Load();
+		}
+		}
 		break;
 		case WXK_ESCAPE:
 		if(aux==1){SaveDialog* savedlg;savedlg=new SaveDialog();savedlg->ShowModal();savedlg->Destroy();Adrix->Destroy();Load();}
@@ -884,6 +892,19 @@ void MyFrame::Stage11()
 	Adrix=new wxStaticBitmap(panel, ID_DIBUJO, adrixdown, wxPoint(adrx, adry));
 	city=11;
 }
+void MyFrame::Stage12()
+{
+	int granja=wxMessageBox("Quieres comprar materia prima a 50 $?","Granjas Nacionales",wxYES_NO|wxICON_QUESTION);
+	if(granja==wxYES){
+	money-=50;
+	prima++;
+	city=3;
+	Load();
+	}else{
+	city=3;
+	Load();
+	}
+}
 void MyFrame::Load()
 {
 	wxBitmap bocadillo("/opt/extras.ubuntu.com/azpazeta/media/Bocadillo.png",wxBITMAP_TYPE_PNG);
@@ -910,6 +931,7 @@ void MyFrame::Load()
 	case 6: Stage6(); break;
 	case 7: Stage7(); break;
 	case 11: Stage11(); break;
+	case 12:Stage12(); break;
 	default: Stage1(); break;
 
 	}
