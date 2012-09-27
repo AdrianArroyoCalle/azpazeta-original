@@ -7,7 +7,7 @@ Standards-Version: 3.9.2
 Homepage: http://sites.google.com/site/divelmedia
 
 
-Architecture: i386 amd64
+Architecture: all
 Depends:${shlibs:Depends}
 Version: 1.0.0.3
 Description: Azpazeta

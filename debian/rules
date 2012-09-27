@@ -44,7 +44,7 @@ install: build
 	dh_installdirs
 	# Create directories and copy files
 	# Build the sctructure
-	sudo apt-add-repository ppa:fransschreuder1/usbpicprog-stable -y
+	#sudo apt-add-repository ppa:fransschreuder1/usbpicprog-stable -y
 	mkdir -p ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta
 	mkdir -p ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/media
 	mkdir -p ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/audio
@@ -55,21 +55,7 @@ install: build
 	cp source/*.png ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/media/
 	cp source/Azpazeta.desktop ${CURDIR}/debian/azpazeta/usr/share/applications/extras-Azpazeta.desktop
 	cp source/Icono64.png ${CURDIR}/debian/azpazeta/usr/share/pixmaps/
-	cp source/*.cpp ${CURDIR}/debian/azpazeta/usr/src/
-	cp source/* $(AZPDIR)
-	g++ -c $(AZPDIR)inicio.cpp -o Inicio.o $(PRE) $(CFLAGS)
-	g++ -c $(AZPDIR)dkey.cpp -o dkey.o $(PRE) $(CFLAGS)
-	g++ -c $(AZPDIR)police.cpp -o police.o $(PRE) $(CFLAGS)
-	g++ -c $(AZPDIR)VarGlobal.cpp -o VarGlobal.o $(PRE) $(CFLAGS)
-	g++ -c $(AZPDIR)save.cpp -o save.o $(PRE) $(CFLAGS)
-	g++ -c $(AZPDIR)tren.cpp -o tren.o $(PRE) $(CFLAGS)
-	g++ -c $(AZPDIR)hiper.cpp -o hiper.o $(PRE) $(CFLAGS)
-	g++ -c $(AZPDIR)golf.cpp -o golf.o $(PRE) $(CFLAGS)
-	g++ -c $(AZPDIR)dialogbox.cpp -o dialogbox.o $(PRE) $(CFLAGS)
-	g++ -c $(AZPDIR)mercado.cpp -o mercado.o $(PRE) $(CFLAGS)
-	g++ -o $(AZPDIR)Azpazeta $(OBJ) $(LIBFLAGS) 
-	cp $(AZPDIR)Azpazeta ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/
-	rm $(AZPDIR)*
+	cp source/Azpazeta ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/
 		
 	# Structure and source files
 	#mkdir -p ${CURDIR}/debian/agendacorreosdivelso/usr/share/agendacorreosdivelso
