@@ -9,7 +9,7 @@ Homepage: http://sites.google.com/site/divelmedia
 
 Architecture: all
 Depends:${shlibs:Depends}
-Version: 1.0.0.3
+Version: 1.0.0.4
 Description: Azpazeta
  The strategy-economics game.
 Package: azpazeta
