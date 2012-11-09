@@ -12,4 +12,17 @@ MimeType=application/x-azpazeta-savefile
 Name[es_ES]=Azpazeta
 GenericName=Economic and strategy game
 GenericName[es_ES]=Juego de estrategia y economía
+OnlyShowIn=GNOME;Unity;
+
+X-Ayatana-Desktop-Shortcuts=Actualizar;AZPServer;
+
+[Actualizar Shortcut Group]
+Name=Actualizar
+Exec=update-manager
+OnlyShowIn=Unity
+
+[AZPServer Shortcut Group]
+Name=AZPServer
+Exec=gnome-terminal -x /opt/extras.ubuntu.com/azpazeta/AZPServer
+OnlyShowIn=Unity
 
