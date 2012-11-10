@@ -10,11 +10,11 @@
 # Modified to make a template file for a multi-binary package with separated
 # build-arch and build-indep targets  by Bill Allombert 2001
 AZPDIR = ${CURDIR}/debian/azpazeta/usr/src/
-CFLAGS = `wx-config --cppflags`
+CFLAGS = `wx-config --cppflags` `pkg-config --cflags glib-2.0`
 PRE = -DIDIOMA=ES -DLINUX
 OBJ = VarGlobal.o Inicio.o save.o tren.o dkey.o police.o hiper.o golf.o dialogbox.o mercado.o
 EXIT = Azpazeta
-LIBFLAGS = `wx-config --static --libs` -lnotify
+LIBFLAGS = `wx-config --static --libs` -lnotify `pkg-config --libs glib-2.0`
 
 
 
