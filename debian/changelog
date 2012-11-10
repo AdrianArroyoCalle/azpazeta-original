@@ -1,5 +1,6 @@
-azpazeta (1.0.0.4) precise; urgency=low
+azpazeta (1.0.0.5) precise; urgency=low
 
+  * Optimizacion amd64
   * Errores de Render
   * Formato de archivos en ZIP
   * Dependencias actualizadas
