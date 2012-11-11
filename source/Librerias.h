@@ -53,8 +53,6 @@
 //#include "azpupdater.h"
 #include "golf.h"
 #include "dialogbox.h"
-#include <wx/glcanvas.h>
-#include <wx/gdicmn.h>
 #include <math.h>
 #include "mercado.h"
 using namespace std;
