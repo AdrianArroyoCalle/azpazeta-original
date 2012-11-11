@@ -14,7 +14,7 @@ CFLAGS = `wx-config --cppflags`
 PRE = -DIDIOMA=ES -DLINUX
 OBJ = VarGlobal.o Inicio.o save.o tren.o dkey.o police.o hiper.o golf.o dialogbox.o mercado.o
 EXIT = Azpazeta
-LIBFLAGS = `wx-config --static --libs`
+LIBFLAGS = `wx-config --libs`
 
 
 
