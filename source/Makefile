@@ -3,12 +3,12 @@
 # Macros
 
 CC = g++
-CFLAGS = `wx-config --cppflags` `pkg-config --cflags glib-2.0 gtk+-2.0`
+CFLAGS = `wx-config --cppflags` #`pkg-config --cflags glib-2.0 gtk+-2.0`
 PRE = -DIDIOMA=ES -DLINUX
 SRC = inicio.cpp
 OBJ = VarGlobal.o Inicio.o save.o tren.o dkey.o police.o hiper.o golf.o dialogbox.o mercado.o
 EXIT = Azpazeta
-LIBFLAGS = `wx-config --libs` `pkg-config --libs glib-2.0 gtk+-2.0` -L. -lnotify #-lmodloader -lazpupdater
+LIBFLAGS = `wx-config --libs` #`pkg-config --libs glib-2.0 gtk+-2.0` -L. -lnotify #-lmodloader -lazpupdater
 
 
 # Reglas explicitas

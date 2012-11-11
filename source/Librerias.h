@@ -15,7 +15,6 @@
 #include "Idiomas.h"
 #include <wx/cmdline.h>
 #include "save.h"
-#include <libnotify/notify.h>
 #include <wx/taskbar.h>
 #include "chr_taskbar.h"
 #include <string>
@@ -56,7 +55,6 @@
 #include "dialogbox.h"
 #include <wx/glcanvas.h>
 #include <wx/gdicmn.h>
-#include <GL/glu.h>
 #include <math.h>
 #include "mercado.h"
 using namespace std;

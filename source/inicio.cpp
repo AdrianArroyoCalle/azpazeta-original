@@ -861,13 +861,13 @@ void MyFrame::Load()
 	/*actualizar->Destroy();
 	jugar->Destroy();
 	instrucciones->Destroy();*/
-	NotifyNotification *n;
+	/*NotifyNotification *n;
     	notify_init("Azpazeta");
     	n = notify_notification_new ("Azpazeta", "Se ha cargado correctamente la partida", NULL);
     	notify_notification_set_timeout(n, 3000);
 	if (!notify_notification_show (n, NULL)) {
         wxPrintf("Error al enviar notificación.\n");        
-    	}
+    	}*/
 	switch(city){
 	case 1: Stage1(); break;
 	case 2: Stage2(); break;
