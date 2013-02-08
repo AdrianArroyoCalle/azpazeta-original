@@ -53,7 +53,7 @@ install: build
 	
 	cp source/*.png ${CURDIR}/debian/azpazeta/opt/extras.ubuntu.com/azpazeta/media/
 	cp source/Azpazeta.desktop ${CURDIR}/debian/azpazeta/usr/share/applications/extras-Azpazeta.desktop
-	cp source/Icono64.png ${CURDIR}/debian/azpazeta/usr/share/pixmaps/
+	cp source/azpazeta.svg ${CURDIR}/debian/azpazeta/usr/share/pixmaps/
 
 	
 

@@ -6,19 +6,14 @@ Comment[es]=Azpazeta, el juego económico y estratégico.
 Exec="/opt/extras.ubuntu.com/azpazeta/Azpazeta" %f
 Terminal=false
 Type=Application
-Icon=Icono64.png
+Icon=azpazeta
 Categories=GTK;KDE;Games;
 MimeType=application/x-azpazeta-savefile
 Name[es_ES]=Azpazeta
 GenericName=Economic and strategy game
 GenericName[es_ES]=Juego de estrategia y economía
 
-X-Ayatana-Desktop-Shortcuts=Actualizar;AZPServer;Bug;
-
-[Actualizar Shortcut Group]
-Name=Actualizar
-Exec=update-manager
-OnlyShowIn=Unity
+X-Ayatana-Desktop-Shortcuts=AZPServer;Bug;
 
 [Bug Shortcut Group]
 Name=Report a bug
